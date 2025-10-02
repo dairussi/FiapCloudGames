@@ -1,4 +1,3 @@
-using FiapCloudGames.Domain.Common.ValueObjects;
 using FiapCloudGames.Domain.Users.ValueObjects;
 
 namespace FiapCloudGames.Application.Users.UseCases.Commands.AddUser;
