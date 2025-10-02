@@ -1,4 +1,4 @@
-namespace FiapCloudGames.Domain.Common.ValueObjects;
+namespace FiapCloudGames.Domain.Users.ValueObjects;
 
 public record RawPassword
 {
