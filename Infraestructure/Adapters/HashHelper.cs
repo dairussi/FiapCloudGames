@@ -1,11 +1,12 @@
 using FiapCloudGames.Domain.Common.Ports;
+using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 
 namespace FiapCloudGames.Infraestructure.Adapters;
 
 public class HashHelper : IHashHelper
 {
-    public (string Hash, string Salt) GenerateHash(string password)
+    public (string Hash, string Salt) GenerateHash(PasswordHasher password)
     {
         byte[] saltBytes = new byte[16];
         using (var rng = RandomNumberGenerator.Create())

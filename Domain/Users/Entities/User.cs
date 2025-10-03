@@ -4,12 +4,13 @@ namespace FiapCloudGames.Domain.Users.Entities;
 
 public class User
 {
-    private User(FullName fullName, EmailAddress emailAddress, string nickName, string passwordHash)
+    private User(FullName fullName, EmailAddress emailAddress, string nickName, string passwordHash, string passwordSalt)
     {
         FullName = fullName;
         Email = emailAddress;
         NickName = nickName;
         PasswordHash = passwordHash;
+        PasswordSalt = passwordSalt;
     }
 
     private User() { }
@@ -18,12 +19,12 @@ public class User
     public EmailAddress Email { get; private set; } = default!;
     public string NickName { get; private set; } = default!;
     public string PasswordHash { get; private set; } = default!;
-    public string PasswordIv { get; private set; } = default!;
+    public string PasswordSalt { get; private set; } = default!;
 
-    public static User Create(FullName fullName, EmailAddress emailAddress, string nickName, string passwordHash)
+    public static User Create(FullName fullName, EmailAddress emailAddress, string nickName, string passwordHash, string passwordSalt)
     {
 
-        User user = new User(fullName, emailAddress, nickName, passwordHash);
+        User user = new User(fullName, emailAddress, nickName, passwordHash, passwordSalt);
         return user;
 
     }
