@@ -13,13 +13,13 @@ public class AddOrUpdateUserCommandHandler : IAddOrUpdateUserCommandHandler
     }
     public Task<ResultData<User>> Handle(AddOrUpdateUserCommand command, CancellationToken cancellationToken)
     {
-        var passwordHash = _hashHelper.GenerateHash(command.Password);
+        //var passwordHash = _hashHelper.GenerateHash(command.Password);
 
-        var user = User.Create(command.Name, command.Email, command.NickName, passwordHash.Hash, passwordHash.Salt);
+        //var user = User.Create(command.Name, command.Email, command.NickName, passwordHash.Hash, passwordHash.Salt);
 
+        //return ResultData<User>.Success(user);
 
-
-        return ResultData<User>.Success(user);
+        throw new NotImplementedException();
 
     }
 }
