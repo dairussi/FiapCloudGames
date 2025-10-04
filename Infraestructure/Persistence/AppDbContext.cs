@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
+
     }
 
     public DbSet<User> Users { get; set; }
@@ -20,6 +21,9 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Game>()
             .OwnsOne(g => g.AgeRating);
+
+        modelBuilder.Entity<Game>()
+              .OwnsOne(g => g.Price);
 
         modelBuilder.Entity<User>()
             .OwnsOne(u => u.Email);
