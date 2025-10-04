@@ -18,5 +18,8 @@ public class AddOrUpdateUserCommandHandler : IAddOrUpdateUserCommandHandler
         var user = User.Create(command.Name, command.Email, command.NickName, passwordHash.Hash, passwordHash.Salt);
 
 
+
+        return ResultData<User>.Success(user);
+
     }
 }
