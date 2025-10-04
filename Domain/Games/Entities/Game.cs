@@ -18,7 +18,7 @@ public class Game
     }
 
     private Game(){ }
-
+    public int Id { get; set; }
     public Guid PublicId { get; private set; } = Guid.NewGuid();
     public string Description { get; private set; } = default!;
     public GameGenreEnum Genre { get; private set; } = default!;
