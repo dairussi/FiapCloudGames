@@ -1,8 +1,9 @@
+using FiapCloudGames.Domain.Common.Entities;
 using FiapCloudGames.Domain.Users.ValueObjects;
 
 namespace FiapCloudGames.Domain.Users.Entities;
 
-public class User
+public class User : BaseEntity
 {
     private User(FullName fullName, EmailAddress emailAddress, string nickName, string passwordHash, string passwordSalt)
     {
@@ -14,7 +15,6 @@ public class User
     }
 
     private User() { }
-    public int Id { get; set; }
     public Guid PuplicId { get; private set; } = Guid.NewGuid();
     public FullName FullName { get; private set; } = default!;
     public EmailAddress Email { get; private set; } = default!;
@@ -35,4 +35,3 @@ public class User
         PasswordHash = password;
     }
 }
-//TODO falta o salt e mudar o update com salt
