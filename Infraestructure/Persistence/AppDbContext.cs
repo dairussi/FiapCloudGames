@@ -21,6 +21,12 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Game>()
             .OwnsOne(g => g.AgeRating);
 
+        modelBuilder.Entity<User>()
+            .OwnsOne(u => u.Email);
+
+        modelBuilder.Entity<User>()
+            .OwnsOne(u => u.FullName);
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
     }

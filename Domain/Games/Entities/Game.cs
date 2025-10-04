@@ -1,10 +1,11 @@
 using FiapCloudGames.Domain.Games.ValueObjects;
 using FiapCloudGames.Domain.Games.Enum;
 using System.Net.NetworkInformation;
+using FiapCloudGames.Domain.Common.Entities;
 
 namespace FiapCloudGames.Domain.Games.Entities;
 
-public class Game
+public class Game : BaseEntity
 {
 
     private Game(string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating)
@@ -17,8 +18,7 @@ public class Game
         AgeRating = ageRating;
     }
 
-    private Game(){ }
-    public int Id { get; set; }
+    private Game() { }
     public Guid PublicId { get; private set; } = Guid.NewGuid();
     public string Description { get; private set; } = default!;
     public GameGenreEnum Genre { get; private set; } = default!;
