@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="API\Controllers\Games\" />
-    <Folder Include="Application\Games\UseCases\Commands\AddGame\" />
     <Folder Include="Application\Games\UseCases\Queries\" />
     <Folder Include="Application\Users\UseCases\Queries\" />
   </ItemGroup>
