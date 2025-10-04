@@ -13,6 +13,7 @@ public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
 
     public Task<ResultData<Game>> Handle(AddOrUpdateGameCommand command, CancellationToken cancellationToken)
     {
+        //incluir aqui a validação GameExistsAsync;
         var game = Game.Create(command.Description,command.Genre,command.ReleaseDate,command.Developer,command.Price,command.AgeRating);
         //persistencia DB
 

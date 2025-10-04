@@ -1,5 +1,6 @@
-﻿namespace FiapCloudGames.Domain.Games.Ports;
+namespace FiapCloudGames.Domain.Games.Ports;
 
 public interface IGameCommandRepository
 {
+
 }
