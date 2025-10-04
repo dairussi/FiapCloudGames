@@ -14,6 +14,7 @@ public class User
     }
 
     private User() { }
+    public int Id { get; set; }
     public Guid PuplicId { get; private set; } = Guid.NewGuid();
     public FullName FullName { get; private set; } = default!;
     public EmailAddress Email { get; private set; } = default!;
