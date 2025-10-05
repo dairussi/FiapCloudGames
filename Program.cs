@@ -1,7 +1,7 @@
 using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 using FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 using FiapCloudGames.Domain.Common.Ports;
-using FiapCloudGames.Infraestructure.Adapters;
+using FiapCloudGames.Infraestructure.Adapters.Common;
 using FiapCloudGames.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;

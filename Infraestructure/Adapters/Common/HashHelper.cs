@@ -2,7 +2,7 @@ using FiapCloudGames.Domain.Common.Ports;
 using FiapCloudGames.Domain.Users.ValueObjects;
 using System.Security.Cryptography;
 
-namespace FiapCloudGames.Infraestructure.Adapters;
+namespace FiapCloudGames.Infraestructure.Adapters.Common;
 
 public class HashHelper : IHashHelper
 {
