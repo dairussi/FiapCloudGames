@@ -5,7 +5,7 @@ namespace FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 
 public class AddOrUpdateGameCommand
 {
-    private AddOrUpdateGameCommand(Guid? publicId,string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating)
+    private AddOrUpdateGameCommand(Guid? publicId,string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating, int createdBy)
     {
         PublicId = publicId;
         Description = description;
@@ -14,6 +14,7 @@ public class AddOrUpdateGameCommand
         Developer = developer;
         Price = price;
         AgeRating = ageRating;
+        CreatedBy = createdBy;
     }
 
     public Guid? PublicId { get;}
@@ -23,9 +24,10 @@ public class AddOrUpdateGameCommand
     public string Developer { get; } 
     public Price Price { get; } 
     public AgeRating AgeRating { get; }
+    public int CreatedBy { get; set; }
 
-    public static AddOrUpdateGameCommand Create(Guid? publicId, string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating)
+    public static AddOrUpdateGameCommand Create(Guid? publicId, string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating, int createdBy)
     {
-        return new AddOrUpdateGameCommand(publicId,description, genre, releaseDate, developer, price, ageRating);
+        return new AddOrUpdateGameCommand(publicId,description, genre, releaseDate, developer, price, ageRating, createdBy);
     }
 }

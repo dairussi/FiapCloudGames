@@ -52,9 +52,10 @@ public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
                 command.Description,
                 command.Genre,
                 command.ReleaseDate,
-                command.Developer
-                , command.Price,
-                command.AgeRating
+                command.Developer,
+                command.Price,
+                command.AgeRating,
+                command.CreatedBy
             );
         }
         await _gameCommandRepository.SaveAsync(game, cancellationToken);
