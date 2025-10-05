@@ -33,4 +33,15 @@ public class Game : BaseEntity
         return game;
     }
 
+    public void UpdateDetails(string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating)
+    {
+
+        Description = description;
+        Genre = genre;
+        ReleaseDate = releaseDate;
+        Developer = developer;
+        Price = price;
+        AgeRating = ageRating;
+    }
+
 }

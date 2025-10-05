@@ -4,7 +4,10 @@ using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FiapCloudGames.API.Controllers.Games;
-public class GamesController
+
+[ApiController]
+[Route("api/games")]
+public class GamesController : ControllerBase
 {
 
     [HttpPost]

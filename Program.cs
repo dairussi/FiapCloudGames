@@ -1,7 +1,9 @@
 using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 using FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 using FiapCloudGames.Domain.Common.Ports;
+using FiapCloudGames.Domain.Games.Ports;
 using FiapCloudGames.Infraestructure.Adapters.Common;
+using FiapCloudGames.Infraestructure.Adapters.Games.Repositories;
 using FiapCloudGames.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -19,6 +21,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddScoped<IAddOrUpdateUserCommandHandler, AddOrUpdateUserCommandHandler>();
 builder.Services.AddScoped<IHashHelper, HashHelper>();
 builder.Services.AddScoped<IAddOrUpdateGameCommandHandler, AddOrUpdateGameCommandHandler>();
+builder.Services.AddScoped<IGameCommandRepository, GameCommandRepository>();
+builder.Services.AddScoped<IGameQueryRepository, GameQueryRepository>();
 
 
 builder.Services.AddControllers();
