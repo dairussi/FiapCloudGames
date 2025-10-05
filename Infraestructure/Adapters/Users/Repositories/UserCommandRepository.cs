@@ -3,7 +3,7 @@ using FiapCloudGames.Domain.Users.Ports;
 using FiapCloudGames.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace FiapCloudGames.Infraestructure.Adapters;
+namespace FiapCloudGames.Infraestructure.Adapters.Users.Repositories;
 
 public class UserCommandRepository : IUserCommandRepository
 {
