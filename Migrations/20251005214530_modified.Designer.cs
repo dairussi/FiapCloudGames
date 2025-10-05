@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FiapCloudGames.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251005015210_Initial_v2")]
-    partial class Initial_v2
+    [Migration("20251005214530_modified")]
+    partial class modified
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,10 +69,6 @@ namespace FiapCloudGames.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<string>("NickName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -81,7 +77,7 @@ namespace FiapCloudGames.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PuplicId")
+                    b.Property<Guid>("PublicId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -176,10 +172,31 @@ namespace FiapCloudGames.Migrations
                                 .HasForeignKey("UserId");
                         });
 
+                    b.OwnsOne("FiapCloudGames.Domain.Users.ValueObjects.NickName", "NickName", b1 =>
+                        {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Nick")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Nick");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
                     b.Navigation("Email")
                         .IsRequired();
 
                     b.Navigation("FullName")
+                        .IsRequired();
+
+                    b.Navigation("NickName")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
