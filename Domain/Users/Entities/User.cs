@@ -15,7 +15,7 @@ public class User : BaseEntity
     }
 
     private User() { }
-    public Guid PuplicId { get; private set; } = Guid.NewGuid();
+    public Guid PublicId { get; private set; } = Guid.NewGuid();
     public FullName FullName { get; private set; } = default!;
     public EmailAddress Email { get; private set; } = default!;
     public string NickName { get; private set; } = default!;
