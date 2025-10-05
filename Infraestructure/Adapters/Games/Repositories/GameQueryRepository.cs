@@ -1,6 +1,6 @@
 using FiapCloudGames.Domain.Games.Ports;
 
-namespace FiapCloudGames.Infraestructure.Games.Repositories;
+namespace FiapCloudGames.Infraestructure.Adapters.Games.Repositories;
 
 public class GameQueryRepository : IGameQueryRepository
 {
