@@ -8,7 +8,7 @@ namespace FiapCloudGames.Domain.Games.Entities;
 public class Game : BaseEntity
 {
 
-    private Game(string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating)
+    private Game(string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating, int createdBy)
     {
         Description = description;
         Genre = genre;
@@ -16,6 +16,7 @@ public class Game : BaseEntity
         Developer = developer;
         Price = price;
         AgeRating = ageRating;
+        CreatedBy = createdBy;
     }
 
     private Game() { }
@@ -27,10 +28,21 @@ public class Game : BaseEntity
     public Price Price { get; private set; } = default!;
     public AgeRating AgeRating { get; private set; } = default!;
 
-    public static Game Create(string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating)
+    public static Game Create(string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating, int createdBy)
     {
-        Game game = new Game(description, genre, releaseDate, developer, price, ageRating);
+        Game game = new Game(description, genre, releaseDate, developer, price, ageRating, createdBy);
         return game;
+    }
+
+    public void UpdateDetails(string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating)
+    {
+
+        Description = description;
+        Genre = genre;
+        ReleaseDate = releaseDate;
+        Developer = developer;
+        Price = price;
+        AgeRating = ageRating;
     }
 
 }
