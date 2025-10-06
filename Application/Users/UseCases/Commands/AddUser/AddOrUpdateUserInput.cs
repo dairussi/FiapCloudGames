@@ -4,6 +4,7 @@ namespace FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 
 public class AddOrUpdateUserInput
 {
+    public Guid? PublicId { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
     public required string Nick { get; set; }
@@ -11,7 +12,7 @@ public class AddOrUpdateUserInput
 
     public AddOrUpdateUserCommand MapToCommand()
     {
-        return AddOrUpdateUserCommand.Create(FullName.Create(Name), EmailAddress.Create(Email), NickName.Create(Nick), RawPassword.Create(Password));
+        return AddOrUpdateUserCommand.Create(PublicId, FullName.Create(Name), EmailAddress.Create(Email), NickName.Create(Nick), RawPassword.Create(Password));
     }
 
 }

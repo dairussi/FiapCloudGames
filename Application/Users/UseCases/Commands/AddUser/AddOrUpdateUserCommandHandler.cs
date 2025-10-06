@@ -16,6 +16,8 @@ public class AddOrUpdateUserCommandHandler : IAddOrUpdateUserCommandHandler
     }
     public async Task<ResultData<User>> Handle(AddOrUpdateUserCommand command, CancellationToken cancellationToken)
     {
+        var userExists = _userCommandRepository.GameExistsAsync(command.PublicId, cancellationToken);
+
         var passwordHash = _hashHelper.GenerateHash(command.Password);
 
         var user = User.Create(command.Name, command.Email, command.NickName, passwordHash.Hash, passwordHash.Salt);
