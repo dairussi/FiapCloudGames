@@ -16,13 +16,11 @@ public class AddOrUpdateGameInput
 
     public AddOrUpdateGameCommand MapToCommand()
     {
-        // Tenta converter a string 'Genre' para o enum 'GameGenreEnum'
         if (!Enum.TryParse(Genre, true, out GameGenreEnum genreEnum))
         {
-            // Se a string não for um valor válido do enum, lança uma exceção
             throw new ArgumentException("Gênero do jogo inválido.", nameof(Genre));
         }
 
-        return AddOrUpdateGameCommand.Create(PublicId,Description, genreEnum, ReleaseDate,Developer,Price.Create(PriceValue),AgeRating.Create(AgeRatingValue),CreatedBy);
+        return AddOrUpdateGameCommand.Create(PublicId, Description, genreEnum, ReleaseDate, Developer, Price.Create(PriceValue), AgeRating.Create(AgeRatingValue), CreatedBy);
     }
 }

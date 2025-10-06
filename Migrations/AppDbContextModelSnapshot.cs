@@ -26,64 +26,80 @@ namespace FiapCloudGames.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Developer")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Genre")
-                        .HasColumnType("int");
+                    b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("PublicId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Games");
+                    b.HasIndex("PublicId")
+                        .IsUnique();
+
+                    b.ToTable("Game", (string)null);
                 });
 
             modelBuilder.Entity("FiapCloudGames.Domain.Users.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<string>("NickName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("PasswordSalt")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
-                    b.Property<Guid>("PuplicId")
+                    b.Property<Guid>("PublicId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("PublicId")
+                        .IsUnique();
+
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("FiapCloudGames.Domain.Games.Entities.Game", b =>
@@ -95,16 +111,17 @@ namespace FiapCloudGames.Migrations
 
                             b1.Property<int>("MinimiumAge")
                                 .HasColumnType("int")
-                                .HasColumnName("MinimiumAge");
+                                .HasColumnName("MinimumAge");
 
                             b1.Property<string>("Rating")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(10)
+                                .HasColumnType("nvarchar(10)")
                                 .HasColumnName("AgeRating");
 
                             b1.HasKey("GameId");
 
-                            b1.ToTable("Games");
+                            b1.ToTable("Game");
 
                             b1.WithOwner()
                                 .HasForeignKey("GameId");
@@ -117,12 +134,12 @@ namespace FiapCloudGames.Migrations
 
                             b1.Property<decimal>("Value")
                                 .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
+                                .HasColumnType("decimal")
                                 .HasColumnName("Price");
 
                             b1.HasKey("GameId");
 
-                            b1.ToTable("Games");
+                            b1.ToTable("Game");
 
                             b1.WithOwner()
                                 .HasForeignKey("GameId");
@@ -144,12 +161,16 @@ namespace FiapCloudGames.Migrations
 
                             b1.Property<string>("Email")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(254)
+                                .HasColumnType("nvarchar(254)")
                                 .HasColumnName("Email");
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.HasIndex("Email")
+                                .IsUnique();
+
+                            b1.ToTable("User");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
@@ -162,12 +183,35 @@ namespace FiapCloudGames.Migrations
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Name");
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("FullName");
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("User");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.OwnsOne("FiapCloudGames.Domain.Users.ValueObjects.NickName", "NickName", b1 =>
+                        {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Nick")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("NickName");
+
+                            b1.HasKey("UserId");
+
+                            b1.HasIndex("Nick")
+                                .IsUnique();
+
+                            b1.ToTable("User");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
@@ -177,6 +221,9 @@ namespace FiapCloudGames.Migrations
                         .IsRequired();
 
                     b.Navigation("FullName")
+                        .IsRequired();
+
+                    b.Navigation("NickName")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

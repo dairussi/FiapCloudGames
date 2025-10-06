@@ -5,7 +5,7 @@ namespace FiapCloudGames.Domain.Users.Entities;
 
 public class User : BaseEntity
 {
-    private User(FullName fullName, EmailAddress emailAddress, string nickName, string passwordHash, string passwordSalt)
+    private User(FullName fullName, EmailAddress emailAddress, NickName nickName, string passwordHash, string passwordSalt)
     {
         FullName = fullName;
         Email = emailAddress;
@@ -18,11 +18,11 @@ public class User : BaseEntity
     public Guid PublicId { get; private set; } = Guid.NewGuid();
     public FullName FullName { get; private set; } = default!;
     public EmailAddress Email { get; private set; } = default!;
-    public string NickName { get; private set; } = default!;
+    public NickName NickName { get; private set; } = default!;
     public string PasswordHash { get; private set; } = default!;
     public string PasswordSalt { get; private set; } = default!;
 
-    public static User Create(FullName fullName, EmailAddress emailAddress, string nickName, string passwordHash, string passwordSalt)
+    public static User Create(FullName fullName, EmailAddress emailAddress, NickName nickName, string passwordHash, string passwordSalt)
     {
 
         User user = new User(fullName, emailAddress, nickName, passwordHash, passwordSalt);

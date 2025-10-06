@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FiapCloudGames.API.Controllers.Users;
 
-public class UsersController
+[ApiController]
+[Route("api/users")]
+public class UsersController : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> AddOrUpdateUser(
@@ -14,6 +16,6 @@ public class UsersController
     {
         var command = input.MapToCommand();
         var result = await handler.Handle(command, cancellationToken);
-        return result.ToCreatedActionResult("/");
+        return result.ToCreatedActionResult("/pathdogetbyidaqui");
     }
 }

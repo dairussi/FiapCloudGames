@@ -1,21 +1,21 @@
+using FiapCloudGames.Application.Common;
 using Microsoft.AspNetCore.Mvc;
-
-namespace FiapCloudGames.Application.Common;
 
 public static class ResultExtensions
 {
-    public static IActionResult ToCreatedActionResult<T>(this T data, string path = "")
+    public static IActionResult ToCreatedActionResult<T>(this ResultData<T> result, string path = "")
     {
-        return new CreatedResult(path, ResultData<T>.Success(data));
+        if (!result.IsSuccess)
+            return new BadRequestObjectResult(result);
+
+        return new CreatedResult(path, result);
     }
 
-    public static IActionResult ToOkActionResult<T>(this T data)
+    public static IActionResult ToOkActionResult<T>(this ResultData<T> result)
     {
-        return new OkObjectResult(ResultData<T>.Success(data));
-    }
+        if (!result.IsSuccess)
+            return new BadRequestObjectResult(result);
 
-    public static IActionResult ToBadRequestActionResult<T>(this T data, string errorMessage)
-    {
-        return new BadRequestObjectResult(ResultData<T>.Error(errorMessage));
+        return new OkObjectResult(result);
     }
 }

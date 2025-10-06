@@ -20,10 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Infraestructure\Persistence\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Folder Include="Application\Games\UseCases\Queries\" />
 		<Folder Include="Application\Users\UseCases\Queries\" />
 	</ItemGroup>
