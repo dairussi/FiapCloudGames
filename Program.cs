@@ -1,5 +1,6 @@
 using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 using FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
+using FiapCloudGames.Application.Users.UseCases.Queries.GetUserById;
 using FiapCloudGames.Domain.Common.Ports;
 using FiapCloudGames.Domain.Games.Ports;
 using FiapCloudGames.Domain.Users.Ports;
@@ -31,8 +32,9 @@ builder.Services.AddScoped<IAddOrUpdateUserCommandHandler, AddOrUpdateUserComman
 builder.Services.AddScoped<IGameCommandRepository, GameCommandRepository>();
 builder.Services.AddScoped<IGameQueryRepository, GameQueryRepository>();
 builder.Services.AddScoped<IUserCommandRepository, UserCommandRepository>();
-
-
+builder.Services.AddScoped<IUserQueryRepository, UserQueryRepository>();
+builder.Services.AddScoped<IGetUserByIdQueryHandler, GetUserByIdQueryHandler>();
+;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
