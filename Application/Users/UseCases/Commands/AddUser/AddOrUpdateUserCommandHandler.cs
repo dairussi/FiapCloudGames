@@ -16,17 +16,18 @@ public class AddOrUpdateUserCommandHandler : IAddOrUpdateUserCommandHandler
     }
     public async Task<ResultData<User>> Handle(AddOrUpdateUserCommand command, CancellationToken cancellationToken)
     {
-        var userExists = _userCommandRepository.GameExistsAsync(command.PublicId, cancellationToken);
+        var userExists = command.PublicId is not null
+        && await _userCommandRepository.UserExistsAsync(command.PublicId, cancellationToken);
 
         var passwordHash = _hashHelper.GenerateHash(command.Password);
-
         var user = User.Create(command.Name, command.Email, command.NickName, passwordHash.Hash, passwordHash.Salt);
 
-        await _userCommandRepository.AddAsync(user, cancellationToken);
+        if (userExists)
+            await _userCommandRepository.Update(user, cancellationToken);
+        else
+            await _userCommandRepository.AddAsync(user, cancellationToken);
 
         return ResultData<User>.Success(user);
-
-        throw new NotImplementedException();
 
     }
 }
