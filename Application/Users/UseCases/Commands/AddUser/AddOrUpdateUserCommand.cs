@@ -4,7 +4,7 @@ namespace FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 
 public class AddOrUpdateUserCommand
 {
-    private AddOrUpdateUserCommand(FullName fullName, EmailAddress email, string nickName, RawPassword password)
+    private AddOrUpdateUserCommand(FullName fullName, EmailAddress email, NickName nickName, RawPassword password)
     {
         Name = fullName;
         Email = email;
@@ -13,9 +13,9 @@ public class AddOrUpdateUserCommand
     }
     public FullName Name { get; }
     public EmailAddress Email { get; }
-    public string NickName { get; }
+    public NickName NickName { get; }
     public RawPassword Password { get; }
-    public static AddOrUpdateUserCommand Create(FullName fullName, EmailAddress email, string nickName, RawPassword password)
+    public static AddOrUpdateUserCommand Create(FullName fullName, EmailAddress email, NickName nickName, RawPassword password)
     {
         return new AddOrUpdateUserCommand(fullName, email, nickName, password);
     }

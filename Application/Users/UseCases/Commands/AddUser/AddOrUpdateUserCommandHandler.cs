@@ -1,23 +1,28 @@
 using FiapCloudGames.Application.Common;
 using FiapCloudGames.Domain.Common.Ports;
 using FiapCloudGames.Domain.Users.Entities;
+using FiapCloudGames.Domain.Users.Ports;
 
 namespace FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 
 public class AddOrUpdateUserCommandHandler : IAddOrUpdateUserCommandHandler
 {
     private readonly IHashHelper _hashHelper;
-    public AddOrUpdateUserCommandHandler(IHashHelper hashHelper)
+    private readonly IUserCommandRepository _userCommandRepository;
+    public AddOrUpdateUserCommandHandler(IHashHelper hashHelper, IUserCommandRepository userCommandRepository)
     {
         _hashHelper = hashHelper;
+        _userCommandRepository = userCommandRepository;
     }
-    public Task<ResultData<User>> Handle(AddOrUpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task<ResultData<User>> Handle(AddOrUpdateUserCommand command, CancellationToken cancellationToken)
     {
-        //var passwordHash = _hashHelper.GenerateHash(command.Password);
+        var passwordHash = _hashHelper.GenerateHash(command.Password);
 
-        //var user = User.Create(command.Name, command.Email, command.NickName, passwordHash.Hash, passwordHash.Salt);
+        var user = User.Create(command.Name, command.Email, command.NickName, passwordHash.Hash, passwordHash.Salt);
 
-        //return ResultData<User>.Success(user);
+        await _userCommandRepository.AddAsync(user, cancellationToken);
+
+        return ResultData<User>.Success(user);
 
         throw new NotImplementedException();
 
