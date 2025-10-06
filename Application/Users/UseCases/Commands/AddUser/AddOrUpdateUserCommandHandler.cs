@@ -28,6 +28,5 @@ public class AddOrUpdateUserCommandHandler : IAddOrUpdateUserCommandHandler
             await _userCommandRepository.AddAsync(user, cancellationToken);
 
         return ResultData<User>.Success(user);
-
     }
 }

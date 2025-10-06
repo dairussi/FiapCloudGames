@@ -9,9 +9,9 @@ public class UserCommandRepository : IUserCommandRepository
 {
     private readonly AppDbContext _dbContext;
 
-    public UserCommandRepository(AppDbContext context)
+    public UserCommandRepository(AppDbContext dbContext)
     {
-        _dbContext = context;
+        _dbContext = dbContext;
     }
 
     public async Task<User> AddAsync(User user, CancellationToken cancellationToken)
