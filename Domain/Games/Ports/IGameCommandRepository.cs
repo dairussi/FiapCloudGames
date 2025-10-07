@@ -1,9 +1,11 @@
 using FiapCloudGames.Domain.Games.Entities;
-using System.Runtime.CompilerServices;
 
 namespace FiapCloudGames.Domain.Games.Ports;
 
 public interface IGameCommandRepository
 {
-    Task SaveAsync(Game game, CancellationToken cancellationToken);
+    Task<Game> AddAsync(Game game, CancellationToken cancellationToken);
+    Task<Game> UpdateAsync(Game game, CancellationToken cancellationToken);
+    Task<bool> GameExistsAsync(Guid? publicId, string description, string developer, CancellationToken cancellationToken);
+    Task<Game> GetByIdAsync(Guid publicId, CancellationToken cancellationToken);
 }
