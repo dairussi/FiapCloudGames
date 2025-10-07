@@ -8,5 +8,6 @@ public class ResultData<T> : Result
     }
     public T? Data { get; set; }
     public static ResultData<T> Success(T data) => new(data);
+    public static ResultData<T> SuccessNoContent() => new(default);
     public static ResultData<T> Error(string message) => new(default, false, message);
 }

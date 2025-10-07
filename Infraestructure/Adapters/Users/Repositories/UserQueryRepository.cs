@@ -1,3 +1,4 @@
+using FiapCloudGames.Application.Common;
 using FiapCloudGames.Domain.Users.Entities;
 using FiapCloudGames.Domain.Users.Ports;
 using FiapCloudGames.Infraestructure.Persistence;
@@ -18,5 +19,25 @@ public class UserQueryRepository : IUserQueryRepository
         return await _dbContext.Users
               .AsNoTracking()
               .FirstAsync(u => u.PublicId == publicId, cancellationToken);
+    }
+
+    public async Task<PagedResult<User>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken)
+    {
+        var totalCount = await _dbContext.Users.AsNoTracking().CountAsync(cancellationToken);
+
+        var users = await _dbContext.Users
+          .AsNoTracking()
+          .OrderBy(u => u.CreatedAt)
+          .Skip((page - 1) * pageSize)
+          .Take(pageSize)
+          .ToListAsync(cancellationToken);
+
+        return new PagedResult<User>
+        {
+            Items = users,
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount
+        };
     }
 }
