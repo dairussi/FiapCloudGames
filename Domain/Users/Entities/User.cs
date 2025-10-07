@@ -21,6 +21,7 @@ public class User : BaseEntity
     public NickName NickName { get; private set; } = default!;
     public string PasswordHash { get; private set; } = default!;
     public string PasswordSalt { get; private set; } = default!;
+    public bool IsActive { get; private set; } = true;
 
     public static User Create(FullName fullName, EmailAddress emailAddress, NickName nickName, string passwordHash, string passwordSalt)
     {
@@ -33,5 +34,10 @@ public class User : BaseEntity
     public void UpdatePassword(string password, string passwordIv)
     {
         PasswordHash = password;
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
     }
 }

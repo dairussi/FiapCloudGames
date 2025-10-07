@@ -52,6 +52,8 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
         builder.Property(u => u.PasswordSalt)
             .IsRequired()
             .HasMaxLength(128);
-
+        builder.Property(u => u.IsActive)
+            .IsRequired()
+            .HasDefaultValue(true);
     }
 }

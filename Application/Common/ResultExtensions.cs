@@ -18,4 +18,12 @@ public static class ResultExtensions
 
         return new OkObjectResult(result);
     }
+
+    public static IActionResult ToNoContentActionResult<T>(this ResultData<T> result)
+    {
+        if (!result.IsSuccess)
+            return new BadRequestObjectResult(result);
+
+        return new NoContentResult();
+    }
 }

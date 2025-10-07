@@ -35,4 +35,10 @@ public class UserCommandRepository : IUserCommandRepository
 
         return await _dbContext.Users.AnyAsync(u => u.PublicId == publicId, cancellationToken);
     }
+
+    public async Task<User> GetByIdAsync(Guid publicId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users
+              .FirstAsync(u => u.PublicId == publicId, cancellationToken);
+    }
 }
