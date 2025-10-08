@@ -10,7 +10,7 @@ namespace FiapCloudGames.API.Controllers.Games;
 public class GamesController : ControllerBase
 {
 
-    [HttpGet("{publicId")]
+    [HttpGet("{publicId}")]
     public async Task<IActionResult> GetGameById([FromRoute] Guid publicId, [FromServices] IGetGameByIdQueryHandler handler, CancellationToken cancellationToken)
     {
         var query = new GetGameByIdQuery(publicId);
