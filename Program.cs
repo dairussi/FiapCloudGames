@@ -1,4 +1,6 @@
 using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
+using FiapCloudGames.Application.Games.UseCases.Queries.GetGameById;
+using FiapCloudGames.Application.Games.UseCases.Queries.GetGamesPaged;
 using FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 using FiapCloudGames.Application.Users.UseCases.Commands.DeactivateUser;
 using FiapCloudGames.Application.Users.UseCases.Queries.GetUserById;
@@ -29,15 +31,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 }, ServiceLifetime.Scoped);
 
 builder.Services.AddScoped<IHashHelper, HashHelper>();
-builder.Services.AddScoped<IAddOrUpdateGameCommandHandler, AddOrUpdateGameCommandHandler>();
-builder.Services.AddScoped<IAddOrUpdateUserCommandHandler, AddOrUpdateUserCommandHandler>();
-builder.Services.AddScoped<IGameCommandRepository, GameCommandRepository>();
-builder.Services.AddScoped<IGameQueryRepository, GameQueryRepository>();
 builder.Services.AddScoped<IUserCommandRepository, UserCommandRepository>();
 builder.Services.AddScoped<IUserQueryRepository, UserQueryRepository>();
 builder.Services.AddScoped<IGetUserByIdQueryHandler, GetUserByIdQueryHandler>();
 builder.Services.AddScoped<IGetUsersPagedQueryHandler, GetUsersPagedQueryHandler>();
 builder.Services.AddScoped<IDeactivateUserCommandHandler, DeactivateUserCommandHandler>();
+builder.Services.AddScoped<IAddOrUpdateGameCommandHandler, AddOrUpdateGameCommandHandler>();
+builder.Services.AddScoped<IAddOrUpdateUserCommandHandler, AddOrUpdateUserCommandHandler>();
+builder.Services.AddScoped<IGameCommandRepository, GameCommandRepository>();
+builder.Services.AddScoped<IGameQueryRepository, GameQueryRepository>();
+builder.Services.AddScoped<IGetGameByIdQueryHandler, GetGameByIdQueryHandler>();
+builder.Services.AddScoped<IGetGamesPagedQueryHandler, GetGamesPagedQueryHandler>();
+
 ;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

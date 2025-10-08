@@ -7,18 +7,16 @@ namespace FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 
 public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
 {
-    private readonly IGameQueryRepository _gameQueryRepository;
     private readonly IGameCommandRepository _gameCommandRepository;
 
-    public AddOrUpdateGameCommandHandler(IGameQueryRepository gameQueryRepository, IGameCommandRepository gameCommandRepository)
+    public AddOrUpdateGameCommandHandler(IGameCommandRepository gameCommandRepository)
     {
-        _gameQueryRepository = gameQueryRepository;
         _gameCommandRepository = gameCommandRepository;
     }
 
     public async Task<ResultData<Game>> Handle(AddOrUpdateGameCommand command, CancellationToken cancellationToken)
     {
-        var gameExists = await _gameQueryRepository.GameExistsAsync(
+        var gameExists = await _gameCommandRepository.GameExistsAsync(
                 command.PublicId,
                 command.Description,
                 command.Developer,
@@ -32,7 +30,7 @@ public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
 
         if (command.PublicId.HasValue)
         {
-            game = await _gameQueryRepository.GetByIdAsync(command.PublicId.Value, cancellationToken);
+            game = await _gameCommandRepository.GetByIdAsync(command.PublicId.Value, cancellationToken);
 
             if (game == null)
                 return ResultData<Game>.Error("Registro não encontrado.");
@@ -45,6 +43,7 @@ public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
                 command.Price,
                 command.AgeRating
             );
+            await _gameCommandRepository.UpdateAsync(game, cancellationToken);
         }
         else
         {
@@ -57,8 +56,10 @@ public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
                 command.AgeRating,
                 command.CreatedBy
             );
+
+            await _gameCommandRepository.AddAsync(game, cancellationToken);
         }
-        await _gameCommandRepository.SaveAsync(game, cancellationToken);
+        
         return ResultData<Game>.Success(game);
     }
 }
