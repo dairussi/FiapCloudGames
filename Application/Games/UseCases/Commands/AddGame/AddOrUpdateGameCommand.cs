@@ -1,3 +1,4 @@
+using FiapCloudGames.Domain.Common.ValueObjects;
 using FiapCloudGames.Domain.Games.Enum;
 using FiapCloudGames.Domain.Games.ValueObjects;
 

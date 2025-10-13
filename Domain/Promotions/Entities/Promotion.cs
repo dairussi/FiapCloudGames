@@ -1,6 +1,8 @@
 using FiapCloudGames.Domain.Common.Entities;
+using FiapCloudGames.Domain.Games.Entities;
 using FiapCloudGames.Domain.Promotions.Enum;
 using FiapCloudGames.Domain.Promotions.ValueObjects;
+using FiapCloudGames.Domain.Users.Entities;
 
 namespace FiapCloudGames.Domain.Promotions.Entities;
 
@@ -18,14 +20,15 @@ public class Promotion : BaseEntity
             : PromotionStatusEnum.Agendado;
     }
     private Promotion() { }
-
+    public ICollection<Game> Games { get; set; } = [];
+    public ICollection<User> Users { get; set; } = [];
     public Guid PublicId { get; private set; } = Guid.NewGuid();
     public ValidityPeriod Period { get; private set; }
     public DiscountRule DiscountRule { get; private set; }
     public string Description { get; private set; }
     public PromotionStatusEnum Status { get; private set; }
 
-    public static Promotion Create (string description, ValidityPeriod period, DiscountRule discountRule)
+    public static Promotion Create(string description, ValidityPeriod period, DiscountRule discountRule)
     {
         return new Promotion(description, period, discountRule);
     }
@@ -42,7 +45,7 @@ public class Promotion : BaseEntity
     public void CheckVigency(DateTime now)
     {
         if (Status == PromotionStatusEnum.Cancelado || Status == PromotionStatusEnum.Expirado)
-            return; 
+            return;
 
         if (Period.IsActive(now))
         {

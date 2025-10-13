@@ -1,7 +1,8 @@
-using FiapCloudGames.Domain.Games.ValueObjects;
-using FiapCloudGames.Domain.Games.Enum;
-using System.Net.NetworkInformation;
 using FiapCloudGames.Domain.Common.Entities;
+using FiapCloudGames.Domain.Common.ValueObjects;
+using FiapCloudGames.Domain.Games.Enum;
+using FiapCloudGames.Domain.Games.ValueObjects;
+using FiapCloudGames.Domain.Promotions.Entities;
 
 namespace FiapCloudGames.Domain.Games.Entities;
 
@@ -27,6 +28,7 @@ public class Game : BaseEntity
     public string Developer { get; private set; } = default!;
     public Price Price { get; private set; } = default!;
     public AgeRating AgeRating { get; private set; } = default!;
+    public ICollection<Promotion> Promotions { get; set; } = [];
 
     public static Game Create(string description, GameGenreEnum genre, DateTime releaseDate, string developer, Price price, AgeRating ageRating, int createdBy)
     {

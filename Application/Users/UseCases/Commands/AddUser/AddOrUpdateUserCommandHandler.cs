@@ -20,7 +20,7 @@ public class AddOrUpdateUserCommandHandler : IAddOrUpdateUserCommandHandler
         && await _userCommandRepository.UserExistsAsync(command.PublicId, cancellationToken);
 
         var passwordHash = _hashHelper.GenerateHash(command.Password);
-        var user = User.Create(command.Name, command.Email, command.NickName, passwordHash.Hash, passwordHash.Salt);
+        var user = User.Create(command.Name, command.Email, command.NickName, passwordHash.Hash, passwordHash.Salt, command.Role);
 
         if (userExists)
             await _userCommandRepository.Update(user, cancellationToken);

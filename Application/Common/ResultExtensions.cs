@@ -26,4 +26,13 @@ public static class ResultExtensions
 
         return new NoContentResult();
     }
+
+    public static IActionResult ToUnauthorizedActionResult<T>(this ResultData<T> result)
+    {
+        if (!result.IsSuccess)
+            return new BadRequestObjectResult(result);
+
+        return new UnauthorizedObjectResult(new { message = "Não autorizado" });
+    }
+
 }
