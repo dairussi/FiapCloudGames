@@ -16,6 +16,7 @@ using FiapCloudGames.Domain.Users.Ports;
 using FiapCloudGames.Infraestructure.Adapters.Common;
 using FiapCloudGames.Infraestructure.Adapters.GamePurchases;
 using FiapCloudGames.Infraestructure.Adapters.Games.Repositories;
+using FiapCloudGames.Infraestructure.Adapters.Inbound.Middleware;
 using FiapCloudGames.Infraestructure.Adapters.Promotions.Repositories;
 using FiapCloudGames.Infraestructure.Adapters.Promotions.Services;
 using FiapCloudGames.Infraestructure.Adapters.Users.Repositories;
@@ -99,6 +100,8 @@ builder.Services.AddAuthentication(x =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

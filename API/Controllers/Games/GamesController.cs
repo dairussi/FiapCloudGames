@@ -1,6 +1,8 @@
 using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 using FiapCloudGames.Application.Games.UseCases.Queries.GetGameById;
 using FiapCloudGames.Application.Games.UseCases.Queries.GetGamesPaged;
+using FiapCloudGames.Domain.Common.Enuns;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FiapCloudGames.API.Controllers.Games;
@@ -31,7 +33,7 @@ public class GamesController : ControllerBase
         return result.ToOkActionResult();
     }
 
-
+    [Authorize(Roles = nameof(EUserRole.Admin))]
     [HttpPost]
     public async Task<IActionResult> AddOrUpdatGame(
         [FromBody] AddOrUpdateGameInput input,

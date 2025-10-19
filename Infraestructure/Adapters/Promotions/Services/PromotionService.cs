@@ -1,6 +1,5 @@
 using FiapCloudGames.Application.Common.DTOs;
 using FiapCloudGames.Domain.Common.ValueObjects;
-using FiapCloudGames.Domain.Games.Entities;
 using FiapCloudGames.Domain.Games.Ports;
 using FiapCloudGames.Domain.Promotions.Enum;
 using FiapCloudGames.Domain.Promotions.Ports;
@@ -12,11 +11,13 @@ public class PromotionService : IPromotionService
 {
     private readonly IGameQueryRepository _gameQueryRepository;
     private readonly IUserQueryRepository _userQueryRepository;
+
     public PromotionService(IGameQueryRepository gameQueryRepository, IUserQueryRepository userQueryRepository)
     {
         _gameQueryRepository = gameQueryRepository;
         _userQueryRepository = userQueryRepository;
     }
+
     public async Task<PromotionServiceResult> GetBestDiscountAsync(Price price, Guid gameId, int userId, CancellationToken cancellationToken)
     {
         var now = DateTime.UtcNow;
@@ -33,17 +34,14 @@ public class PromotionService : IPromotionService
             return new PromotionServiceResult(0, Price.Create(0));
 
         var bestPromotion = allPromotions
-            .Select(p => new
-            {
-                Promotion = p,
-                DiscountValue = p.DiscountRule.CalculateDiscount(price.Value)
-            })
-            .OrderByDescending(x => x.DiscountValue)
-            .First();
+               .Select(p => new
+               {
+                   Promotion = p,
+                   DiscountValue = p.DiscountRule.CalculateDiscount(price.Value)
+               })
+               .OrderByDescending(x => x.DiscountValue)
+               .First();
 
-        return new PromotionServiceResult(
-           bestPromotion.Promotion.Id,
-           new Price(bestPromotion.DiscountValue)
-   );
+        return new PromotionServiceResult(bestPromotion.Promotion.Id, new Price(bestPromotion.DiscountValue));
     }
 }

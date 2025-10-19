@@ -1,4 +1,6 @@
 using FiapCloudGames.Application.Promotions.UseCases.Commands.AddPromotion;
+using FiapCloudGames.Domain.Common.Enuns;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FiapCloudGames.API.Controllers.Promotions;
@@ -7,6 +9,7 @@ namespace FiapCloudGames.API.Controllers.Promotions;
 [Route("api/[controller]")]
 public class PromotionsController : ControllerBase
 {
+    [Authorize(Roles = nameof(EUserRole.Admin))]
     [HttpPost]
     public async Task<IActionResult> AddOrUpdatePromotion(
         [FromBody] AddOrUpdatePromotionInput input,
