@@ -23,4 +23,17 @@ public class HashHelper : IHashHelper
             return (hash, salt);
         }
     }
+    public bool VerifyHash(RawPassword password, string hash, string salt)
+    {
+        byte[] saltBytes = Convert.FromBase64String(salt);
+        var passwordString = password.ToString();
+
+        using (var pbkdf2 = new Rfc2898DeriveBytes(passwordString, saltBytes, 10000, HashAlgorithmName.SHA256))
+        {
+            byte[] hashBytes = pbkdf2.GetBytes(32);
+            string computedHash = Convert.ToBase64String(hashBytes);
+
+            return computedHash == hash;
+        }
+    }
 }

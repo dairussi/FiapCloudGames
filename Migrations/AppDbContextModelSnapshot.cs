@@ -22,6 +22,42 @@ namespace FiapCloudGames.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FiapCloudGames.Domain.GamePurchases.Entities.GamePurchase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataGamePurchase")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PromotionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GamePurchase", (string)null);
+                });
+
             modelBuilder.Entity("FiapCloudGames.Domain.Games.Entities.Game", b =>
                 {
                     b.Property<int>("Id")
@@ -135,6 +171,11 @@ namespace FiapCloudGames.Migrations
                     b.Property<Guid>("PublicId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PublicId")
@@ -143,8 +184,114 @@ namespace FiapCloudGames.Migrations
                     b.ToTable("User", (string)null);
                 });
 
+            modelBuilder.Entity("GamePromotion", b =>
+                {
+                    b.Property<int>("GamesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PromotionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GamesId", "PromotionsId");
+
+                    b.HasIndex("PromotionsId");
+
+                    b.ToTable("GamePromotion", (string)null);
+                });
+
+            modelBuilder.Entity("PromotionUser", b =>
+                {
+                    b.Property<int>("PromotionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PromotionsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("UserPromotion", (string)null);
+                });
+
+            modelBuilder.Entity("FiapCloudGames.Domain.GamePurchases.Entities.GamePurchase", b =>
+                {
+                    b.HasOne("FiapCloudGames.Domain.Games.Entities.Game", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FiapCloudGames.Domain.Users.Entities.User", null)
+                        .WithMany("GamePurchases")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.OwnsOne("FiapCloudGames.Domain.Common.ValueObjects.Price", "FinalPrice", b1 =>
+                        {
+                            b1.Property<int>("GamePurchaseId")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal>("Value")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal")
+                                .HasColumnName("FinalPrice");
+
+                            b1.HasKey("GamePurchaseId");
+
+                            b1.ToTable("GamePurchase");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GamePurchaseId");
+                        });
+
+                    b.OwnsOne("FiapCloudGames.Domain.Common.ValueObjects.Price", "PromotionValue", b1 =>
+                        {
+                            b1.Property<int>("GamePurchaseId")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal>("Value")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal")
+                                .HasColumnName("PromotionValue");
+
+                            b1.HasKey("GamePurchaseId");
+
+                            b1.ToTable("GamePurchase");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GamePurchaseId");
+                        });
+
+                    b.Navigation("FinalPrice")
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("PromotionValue");
+                });
+
             modelBuilder.Entity("FiapCloudGames.Domain.Games.Entities.Game", b =>
                 {
+                    b.OwnsOne("FiapCloudGames.Domain.Common.ValueObjects.Price", "Price", b1 =>
+                        {
+                            b1.Property<int>("GameId")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal>("Value")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal")
+                                .HasColumnName("Price");
+
+                            b1.HasKey("GameId");
+
+                            b1.ToTable("Game");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GameId");
+                        });
+
                     b.OwnsOne("FiapCloudGames.Domain.Games.ValueObjects.AgeRating", "AgeRating", b1 =>
                         {
                             b1.Property<int>("GameId")
@@ -159,24 +306,6 @@ namespace FiapCloudGames.Migrations
                                 .HasMaxLength(10)
                                 .HasColumnType("nvarchar(10)")
                                 .HasColumnName("AgeRating");
-
-                            b1.HasKey("GameId");
-
-                            b1.ToTable("Game");
-
-                            b1.WithOwner()
-                                .HasForeignKey("GameId");
-                        });
-
-                    b.OwnsOne("FiapCloudGames.Domain.Games.ValueObjects.Price", "Price", b1 =>
-                        {
-                            b1.Property<int>("GameId")
-                                .HasColumnType("int");
-
-                            b1.Property<decimal>("Value")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal")
-                                .HasColumnName("Price");
 
                             b1.HasKey("GameId");
 
@@ -325,6 +454,41 @@ namespace FiapCloudGames.Migrations
 
                     b.Navigation("NickName")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GamePromotion", b =>
+                {
+                    b.HasOne("FiapCloudGames.Domain.Games.Entities.Game", null)
+                        .WithMany()
+                        .HasForeignKey("GamesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FiapCloudGames.Domain.Promotions.Entities.Promotion", null)
+                        .WithMany()
+                        .HasForeignKey("PromotionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PromotionUser", b =>
+                {
+                    b.HasOne("FiapCloudGames.Domain.Promotions.Entities.Promotion", null)
+                        .WithMany()
+                        .HasForeignKey("PromotionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FiapCloudGames.Domain.Users.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FiapCloudGames.Domain.Users.Entities.User", b =>
+                {
+                    b.Navigation("GamePurchases");
                 });
 #pragma warning restore 612, 618
         }

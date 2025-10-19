@@ -1,6 +1,7 @@
 using FiapCloudGames.Application.Common;
 using FiapCloudGames.Domain.Users.Entities;
 using FiapCloudGames.Domain.Users.Ports;
+using FiapCloudGames.Domain.Users.ValueObjects;
 using FiapCloudGames.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,5 +40,21 @@ public class UserQueryRepository : IUserQueryRepository
             PageSize = pageSize,
             TotalCount = totalCount
         };
+    }
+    public async Task<User> GetByIdWithPromotionsAsync(int userId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users
+            .AsNoTracking()
+            .Include(u => u.Promotions)
+            .FirstAsync(u => u.Id == userId, cancellationToken);
+    }
+
+    //TODO pode melhorar se sobrescrever Equals no ValueObject de EmailAddress
+    public async Task<User?> GetByEmailAsync(EmailAddress email, CancellationToken cancellationToken)
+    {
+        var normalizedEmail = email.Email.ToLowerInvariant();
+
+        return await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Email.Email.ToLower() == normalizedEmail);
     }
 }

@@ -1,10 +1,10 @@
-using FiapCloudGames.Application.Common;
 using FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 using FiapCloudGames.Application.Users.UseCases.Commands.DeactivateUser;
 using FiapCloudGames.Application.Users.UseCases.Queries.GetUserById;
 using FiapCloudGames.Application.Users.UseCases.Queries.GetUsersPaged;
+using FiapCloudGames.Domain.Common.Enuns;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace FiapCloudGames.API.Controllers.Users;
 
@@ -32,10 +32,10 @@ public class UsersController : ControllerBase
     {
         var query = new GetUsersPagedQuery(page, pageSize);
         var result = await handler.Handle(query, cancellationToken);
-
         return result.ToOkActionResult();
     }
 
+    [Authorize(Roles = nameof(EUserRole.Admin))]
     [HttpPost]
     public async Task<IActionResult> AddOrUpdateUser(
         [FromBody] AddOrUpdateUserInput input,

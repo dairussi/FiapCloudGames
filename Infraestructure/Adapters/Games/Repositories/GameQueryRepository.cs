@@ -36,4 +36,12 @@ public class GameQueryRepository : IGameQueryRepository
             TotalCount = totalCount
         };
     }
+    public async Task<Game> GetByIdWithPromotionsAsync(Guid publicId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Games
+            .AsNoTracking()
+            .Include(g => g.Promotions)
+            .FirstAsync(g => g.PublicId == publicId, cancellationToken);
+    }
+
 }
