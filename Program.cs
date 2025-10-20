@@ -4,6 +4,8 @@ using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 using FiapCloudGames.Application.Games.UseCases.Queries.GetGameById;
 using FiapCloudGames.Application.Games.UseCases.Queries.GetGamesPaged;
 using FiapCloudGames.Application.Promotions.UseCases.Commands.AddPromotion;
+using FiapCloudGames.Application.Promotions.UseCases.Queries.GetPromotionById;
+using FiapCloudGames.Application.Promotions.UseCases.Queries.GetPromotionsPaged;
 using FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 using FiapCloudGames.Application.Users.UseCases.Commands.DeactivateUser;
 using FiapCloudGames.Application.Users.UseCases.Queries.GetUserById;
@@ -53,6 +55,8 @@ builder.Services.AddScoped<IAddOrUpdatePromotionCommandHandler, AddOrUpdatePromo
 builder.Services.AddScoped<IPromotionCommandRepository, PromotionCommandRepository>();
 builder.Services.AddScoped<IPromotionQueryRepository, PromotionQueryRepository>();
 builder.Services.AddScoped<IPromotionService, PromotionService>();
+builder.Services.AddScoped<IGetPromotionByIdQueryHandler, GetPromotionByIdQueryHandler>();
+builder.Services.AddScoped<IGetPromotionsPagedQueryHandler, GetPromotionsPagedQueryHandler>();
 
 builder.Services.AddScoped<IUserCommandRepository, UserCommandRepository>();
 builder.Services.AddScoped<IUserQueryRepository, UserQueryRepository>();
