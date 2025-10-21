@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiapCloudGames.Tests", "..\FiapCloudGames.Tests\FiapCloudGames.Tests.csproj", "{0D769808-370A-41BA-BFF3-3E992D0EFE03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{5EA360AD-AAEE-4D91-AAE4-408B2632F4E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EA360AD-AAEE-4D91-AAE4-408B2632F4E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EA360AD-AAEE-4D91-AAE4-408B2632F4E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D769808-370A-41BA-BFF3-3E992D0EFE03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D769808-370A-41BA-BFF3-3E992D0EFE03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D769808-370A-41BA-BFF3-3E992D0EFE03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D769808-370A-41BA-BFF3-3E992D0EFE03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
