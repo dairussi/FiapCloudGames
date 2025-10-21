@@ -13,6 +13,9 @@ public class AgeRating
 
     public static AgeRating Create(string rating)
     {
+        if (string.IsNullOrWhiteSpace(rating))
+            throw new ArgumentException("Classificação etária inválida.");
+
         switch (rating.ToUpper())
         {
             case "LIVRE":

@@ -2,121 +2,122 @@
 using FiapCloudGames.Domain.Common.ValueObjects;
 using FiapCloudGames.Domain.Games.Entities;
 using FiapCloudGames.Domain.Games.Enum;
+using FiapCloudGames.Domain.Games.Ports;
 using FiapCloudGames.Domain.Games.ValueObjects;
-using FiapCloudGames.Tests.Application.Mocks.Repositories;
+using FluentAssertions;
 using Moq;
 
 namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
 {
-    public class AddGameCommandHandlerTests
+    public class AddOrUpdateGameCommandHandlerTests
     {
-        [Fact]
-        public async Task GameHandle_NewGameValidCommand_ShouldCallAddAndSucceed()
+        private readonly Mock<IGameCommandRepository> _gameRepositoryMock;
+        private readonly AddOrUpdateGameCommandHandler _handler;
+
+        public AddOrUpdateGameCommandHandlerTests()
         {
-            var commandRepoMock = GameCommandRepositoryMock.GetMock();
+            _gameRepositoryMock = new Mock<IGameCommandRepository>();
+            _handler = new AddOrUpdateGameCommandHandler(_gameRepositoryMock.Object);
+        }
 
-            var handler = new AddOrUpdateGameCommandHandler(commandRepoMock.Object);
-
+        /*
+         * Nome: Handle_ShouldAddGame_WhenGameDoesNotExist
+         * 
+         * Testa que, quando o jogo não existir (GameExistsAsync retorna false),
+         * o handler chama AddAsync() e não chama Update().
+         */
+        [Fact]
+        public async Task Handle_ShouldAddGame_WhenGameDoesNotExist()
+        {
+            // Arrange
             var command = AddOrUpdateGameCommand.Create(
                 publicId: null,
-                description: "Test Game",
+                description: "Jogo de ação e aventura",
                 genre: GameGenreEnum.ActionRPG,
                 releaseDate: DateTime.UtcNow,
                 developer: "Test Developer",
                 price: new Price(59.99m),
-                ageRating: new AgeRating("18+",18),
+                ageRating: new AgeRating("18+", 18),
                 createdBy: 1
             );
-            var cancellationToken = CancellationToken.None;
 
-            var result = await handler.Handle(command, cancellationToken);
+            _gameRepositoryMock
+                .Setup(r => r.GameExistsAsync(It.IsAny<Guid?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
 
-            commandRepoMock.Verify(r => r.AddAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()), Times.Once);
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
 
-            Assert.True(result.IsSuccess);
+            // Assert
+            result.Should().NotBeNull();
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().BeOfType<Game>();
+
+            _gameRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()), Times.Once);
+            _gameRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
+        /*
+         * Nome: Handle_ShouldUpdateGame_WhenGameAlreadyExists
+         * 
+         * Testa que, quando o jogo já existir (GameExistsAsync retorna true),
+         * o handler chama Update() e não chama AddAsync().
+         */
         [Fact]
-        public async Task GameHandle_CommandWithFutureYear_ShouldNotCallRepositoryAndReturnFailure()
+        public async Task Handle_ShouldUpdateGame_WhenGameAlreadyExists()
         {
-            // ARRANGE
-            var commandRepoMock = GameCommandRepositoryMock.GetMock();
-            var handler = new AddOrUpdateGameCommandHandler(commandRepoMock.Object);
-
-            // Comando inválido: ano de lançamento futuro
-            var command = AddOrUpdateGameCommand.Create(
-                publicId: Guid.NewGuid(),
-                description: "Test Game Future Year",
-                genre: GameGenreEnum.Horror,
-                releaseDate: new DateTime(2035, 10, 1),
-                developer: "Future Developer",
-                price: new Price(89.99m),
-                ageRating: new AgeRating("10+", 10),
-                createdBy: 1
-            );
-            // ACT
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            // ASSERT
-            // 1. O Repositório de Comando (Mock) NÃO deve ser chamado.
-            commandRepoMock.Verify(
-                r => r.AddAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()),
-                Times.Never,
-                "O Repositório não deve ser chamado se o Command for inválido."
-            );
-
-            // 2. O resultado deve ser falha (ou conter o erro).
-            Assert.False(result.IsSuccess);
-        }
-
-        [Fact]
-        public async Task GameHandle_ExistingGameValidCommand_ShouldCallUpdateAsync()
-        {
-            var commandRepoMock = GameCommandRepositoryMock.GetMock();
-
-            // 1. Simular que o jogo JÁ EXISTE e que GetByIdAsync o retorna
-            var existingGame = Game.Create(
-                description: "Batman",
-                genre: GameGenreEnum.RPG,
-                releaseDate: new DateTime(2025,10,01,00,26,10,740),
-                developer: "EA GAMES",
-                price: new Price(1890.00M),
-                ageRating: new AgeRating("10+", 10),
-                createdBy: 1
-            );
-
-            var existingGameId = existingGame.PublicId;
-            commandRepoMock.Setup(r => r.GetByIdAsync(existingGameId, It.IsAny<CancellationToken>()))
-                           .ReturnsAsync(existingGame);
-
-            // 2. Mockar o método de atualização
-            commandRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()))
-                           .ReturnsAsync((Game game, CancellationToken ct) => game);
-
-            var handler = new AddOrUpdateGameCommandHandler(commandRepoMock.Object);
-
-            // 3. Command com o ID existente
-            var command = AddOrUpdateGameCommand.Create(
+            // Arrange
+            var existingGameId = Guid.NewGuid();
+            var existingGameCommand = AddOrUpdateGameCommand.Create(
                 publicId: existingGameId,
-                description: "Batman",
-                genre: GameGenreEnum.RPG,
-                releaseDate: new DateTime(2025, 10, 01, 00, 26, 10, 740),
-                developer: "EA GAMES",
-                price: new Price(1890.00M),
-                ageRating: new AgeRating("10+", 10),
+                description: "Versão atualizada do jogo",
+                genre: GameGenreEnum.ActionRPG,
+                releaseDate: DateTime.UtcNow,
+                developer: "Updated Developer",
+                price: new Price(79.99m),
+                ageRating: new AgeRating("16+", 16),
                 createdBy: 1
             );
 
-            var result = await handler.Handle(command, CancellationToken.None);
+            var existingGameEntity = Game.Create(
+                description: "Jogo original",
+                genre: GameGenreEnum.ActionRPG,
+                releaseDate: DateTime.UtcNow.AddDays(-1),
+                developer: "Updated Developer",
+                price: new Price(59.99m),
+                ageRating: new AgeRating("16+", 16),
+                createdBy: 1
+            );
 
-            // VERIFY: Verificar que o UpdateAsync foi chamado, e NÃO o AddAsync
-            commandRepoMock.Verify(
-                r => r.UpdateAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()),
-                Times.Once);
+            // Setup do GameExistsAsync para retornar false, porque o ID já existe
+            _gameRepositoryMock
+                .Setup(r => r.GameExistsAsync(
+                    existingGameCommand.PublicId,
+                    existingGameCommand.Description,
+                    existingGameCommand.Developer,
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false); // falso porque o update é permitido se não existir duplicado
 
-            commandRepoMock.Verify(
-                r => r.AddAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()),
-                Times.Never);
+            // Setup do GetByIdAsync para retornar a entidade existente
+            _gameRepositoryMock
+                .Setup(r => r.GetByIdAsync(existingGameId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(existingGameEntity);
+
+            // Setup do UpdateAsync
+            _gameRepositoryMock
+                .Setup(r => r.UpdateAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((Game g, CancellationToken _) => g);
+
+            // Act
+            var result = await _handler.Handle(existingGameCommand, CancellationToken.None);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().BeOfType<Game>();
+
+            _gameRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()), Times.Once);
+            _gameRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

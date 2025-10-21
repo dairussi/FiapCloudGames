@@ -7,7 +7,7 @@ public class AddOrUpdateUserCommand
 {
     private AddOrUpdateUserCommand(Guid? publicId, FullName fullName, EmailAddress email, NickName nickName, RawPassword password, EUserRole role)
     {
-        PublicId = PublicId;
+        PublicId = publicId;
         Name = fullName;
         Email = email;
         NickName = nickName;
