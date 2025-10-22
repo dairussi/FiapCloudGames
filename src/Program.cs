@@ -1,5 +1,6 @@
 using FiapCloudGames.Application.Auth.UseCases.Queries.LoginUserQuery;
 using FiapCloudGames.Application.GamePurchases.UseCases.Commands.AddGamePurchase;
+using FiapCloudGames.Application.GamePurchases.UseCases.Queries;
 using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 using FiapCloudGames.Application.Games.UseCases.Queries.GetGameById;
 using FiapCloudGames.Application.Games.UseCases.Queries.GetGamesPaged;
@@ -73,6 +74,8 @@ builder.Services.AddScoped<IGetGamesPagedQueryHandler, GetGamesPagedQueryHandler
 
 builder.Services.AddScoped<IAddGamePurchasesCommandHandler, AddGamePurchasesCommandHandler>();
 builder.Services.AddScoped<IGamePurchaseCommandRepository, GamePurchasesCommandRepository>();
+builder.Services.AddScoped<IGamePurchaseQueryRepository, GamePurchaseQueryRepository>();
+builder.Services.AddScoped<IGetByUserGamePurchasesQueryHandler, GetByUserGamePurchasesQueryHandler>();
 
 
 

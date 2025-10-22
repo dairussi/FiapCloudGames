@@ -2,5 +2,10 @@ namespace FiapCloudGames.Application.GamePurchases.UseCases.Commands.AddGamePurc
 
 public class AddGamePurchasesComand
 {
+    public AddGamePurchasesComand(Guid gameId)
+    {
+        GameId = gameId;
+    }
+
     public Guid GameId { get; set; }
 }

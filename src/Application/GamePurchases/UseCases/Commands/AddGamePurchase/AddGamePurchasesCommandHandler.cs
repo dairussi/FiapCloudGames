@@ -26,10 +26,16 @@ public class AddGamePurchasesCommandHandler : IAddGamePurchasesCommandHandler
         _userContext = userContext;
     }
     public async Task<ResultData<GamePurchase>> Handle(AddGamePurchasesComand command, CancellationToken cancellationToken)
-    {//implementar pagamento
+    {
+        //implementar pagamento
         var userId = _userContext.GetCurrentUserId();
         var game = await _gameQueryRepository.GetByIdAsync(command.GameId, cancellationToken);
+
+        if (game == null)
+            return ResultData<GamePurchase>.Error("Jogo não encontrado.");
+
         var bestPromotion = await _promotionService.GetBestDiscountAsync(game.Price, command.GameId, userId, cancellationToken);
+
         var finalPrice = game.Price.Value - bestPromotion.DiscountValue.Value;
 
         var gamePurchase = GamePurchase.Create(userId, game.Id, Price.Create(finalPrice), Price.Create(bestPromotion.DiscountValue.Value), bestPromotion.PromotionId);
