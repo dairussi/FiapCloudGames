@@ -1,4 +1,5 @@
-﻿using FiapCloudGames.Domain.Common.ValueObjects;
+﻿using Bogus;
+using FiapCloudGames.Domain.Common.ValueObjects;
 using FiapCloudGames.Domain.Games.Entities;
 using FiapCloudGames.Domain.Games.Enum;
 using FiapCloudGames.Domain.Games.ValueObjects;
@@ -8,17 +9,35 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
 {
     public class GameTests
     {
+        private readonly Faker _faker;
+        private readonly string _description;
+        private readonly string _developer;
+        private readonly decimal _priceValue;
+        private readonly int _createdBy;
+        private readonly DateTime _baseDate;
+
+        public GameTests()
+        {
+            _faker = new Faker("pt_BR");
+            _description = _faker.Commerce.ProductName();
+            _developer = _faker.Company.CompanyName();
+            _priceValue = _faker.Random.Decimal(50, 300);
+            _createdBy = _faker.Random.Int(1, 10);
+            _baseDate = DateTime.UtcNow;
+        }
+
+
         [Fact]
         public void Create_ShouldReturnGame_WithCorrectProperties()
         {
             // Arrange
-            var description = "Jogo Educacional";
+            var description = _description;
             var genre = GameGenreEnum.ActionRPG;
-            var releaseDate = DateTime.UtcNow;
-            var developer = "FIAP Dev";
-            var price = new Price(59.99m);
+            var releaseDate = _baseDate;
+            var developer = _developer;
+            var price = new Price(_priceValue);
             var ageRating = new AgeRating("16+", 16);
-            var createdBy = 1;
+            var createdBy = _createdBy;
 
             // Act
             var game = Game.Create(description, genre, releaseDate, developer, price, ageRating, createdBy);
@@ -41,21 +60,21 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
         {
             // Arrange
             var game = Game.Create(
-                "Original Game",
+                _description,
                 GameGenreEnum.RPG,
-                DateTime.UtcNow.AddDays(-1),
-                "FIAP Dev",
-                new Price(49.99m),
+                _baseDate.AddDays(-1),
+                _developer,
+                new Price(_priceValue),
                 new AgeRating("12+", 12),
-                1
+                _createdBy
             );
 
-            var newDescription = "Jogo Atualizado";
-            var newGenre = GameGenreEnum.ActionRPG;
-            var newReleaseDate = DateTime.UtcNow;
-            var newDeveloper = "FIAP Dev Updated";
-            var newPrice = new Price(79.99m);
-            var newAgeRating = new AgeRating("16+", 16);
+            var newDescription = _description;
+            var newGenre = GameGenreEnum.Racing;
+            var newReleaseDate = _baseDate;
+            var newDeveloper = _developer;
+            var newPrice = new Price(_priceValue);
+            var newAgeRating = new AgeRating("10+", 10);
 
             // Act
             game.UpdateDetails(newDescription, newGenre, newReleaseDate, newDeveloper, newPrice, newAgeRating);
@@ -74,22 +93,22 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
         {
             // Act
             var game1 = Game.Create(
-                "Game 1",
+                _description,
                 GameGenreEnum.RPG,
-                DateTime.UtcNow,
-                "Dev1",
-                new Price(10),
+                _baseDate,
+               _developer,
+                new Price(_priceValue),
                 new AgeRating("12+", 12),
-                1
+                _createdBy
             );
             var game2 = Game.Create(
-                "Game 2",
+                _description,
                 GameGenreEnum.ActionRPG,
-                DateTime.UtcNow,
-                "Dev2",
-                new Price(20),
+                _baseDate,
+                _developer,
+                new Price(_priceValue),
                 new AgeRating("16+", 16),
-                2
+                _createdBy
             );
 
             // Assert

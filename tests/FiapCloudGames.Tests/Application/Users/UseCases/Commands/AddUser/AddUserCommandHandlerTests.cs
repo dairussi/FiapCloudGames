@@ -1,9 +1,11 @@
-﻿using FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
+﻿using Bogus;
+using FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 using FiapCloudGames.Domain.Common.Enuns;
 using FiapCloudGames.Domain.Common.Ports;
 using FiapCloudGames.Domain.Users.Entities;
 using FiapCloudGames.Domain.Users.Ports;
 using FiapCloudGames.Domain.Users.ValueObjects;
+using FiapCloudGames.Tests.Fakers;
 using FluentAssertions;
 using Moq;
 
@@ -14,6 +16,11 @@ namespace FiapCloudGames.Tests.Application.Users.UseCases.Commands.AddOrUpdateUs
         private readonly Mock<IHashHelper> _hashHelperMock;
         private readonly Mock<IUserCommandRepository> _userRepositoryMock;
         private readonly AddOrUpdateUserCommandHandler _handler;
+        private readonly Faker _faker;
+        private readonly string _fullName;
+        private readonly string _email;
+        private readonly string _nickName;
+        private readonly RawPassword _password;
 
         public AddOrUpdateUserCommandHandlerTests()
         {
@@ -21,6 +28,12 @@ namespace FiapCloudGames.Tests.Application.Users.UseCases.Commands.AddOrUpdateUs
             _userRepositoryMock = new Mock<IUserCommandRepository>();
 
             _handler = new AddOrUpdateUserCommandHandler(_hashHelperMock.Object, _userRepositoryMock.Object);
+
+            _faker = new Faker("pt_BR");
+            _fullName = _faker.Name.FullName();
+            _email = _faker.Internet.Email();
+            _nickName = _faker.Internet.UserName();
+            _password = PasswordFaker.Generate();
         }
         /*
              * Nome: "Handle_ShouldAddUser_WhenUserDoesNotExist"
@@ -39,10 +52,10 @@ namespace FiapCloudGames.Tests.Application.Users.UseCases.Commands.AddOrUpdateUs
             // Arrange
             var command = AddOrUpdateUserCommand.Create(
                 publicId: null,
-                fullName: FullName.Create("Ana Rios"),
-                email: EmailAddress.Create("ana@email.com"),
-                nickName: NickName.Create("aninha"),
-                password: RawPassword.Create("antigaSenha!"),
+                fullName: FullName.Create(_fullName),
+                email: EmailAddress.Create(_email),
+                nickName: NickName.Create(_nickName),
+                password: RawPassword.Create(_password.Password),
                 role: EUserRole.User
             );
 
@@ -74,10 +87,10 @@ namespace FiapCloudGames.Tests.Application.Users.UseCases.Commands.AddOrUpdateUs
             // Arrange
             var existingUser = AddOrUpdateUserCommand.Create(
                 publicId: Guid.NewGuid(),
-                fullName: FullName.Create("Ana Atualizada"),
-                email: EmailAddress.Create("ana@newemail.com"),
-                nickName: NickName.Create("ana_upd"),
-                password: RawPassword.Create("novaSenha!"),
+                fullName: FullName.Create(_fullName),
+                email: EmailAddress.Create(_email),
+                nickName: NickName.Create(_nickName),
+                password: RawPassword.Create(_password.Password),
                 role: EUserRole.Admin
             );
 

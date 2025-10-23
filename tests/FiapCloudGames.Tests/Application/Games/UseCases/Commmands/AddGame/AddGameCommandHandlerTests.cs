@@ -1,4 +1,5 @@
-﻿using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
+﻿using Bogus;
+using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 using FiapCloudGames.Domain.Common.ValueObjects;
 using FiapCloudGames.Domain.Games.Entities;
 using FiapCloudGames.Domain.Games.Enum;
@@ -13,11 +14,24 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
     {
         private readonly Mock<IGameCommandRepository> _gameRepositoryMock;
         private readonly AddOrUpdateGameCommandHandler _handler;
+        private readonly Faker _faker;
+        private readonly string _description;
+        private readonly string _developer;
+        private readonly decimal _priceValue;
+        private readonly int _createdBy;
+        private readonly DateTime _baseDate;
 
         public AddOrUpdateGameCommandHandlerTests()
         {
             _gameRepositoryMock = new Mock<IGameCommandRepository>();
             _handler = new AddOrUpdateGameCommandHandler(_gameRepositoryMock.Object);
+            _faker = new Faker("pt_BR");
+            _description = _faker.Commerce.ProductName();
+            _developer = _faker.Company.CompanyName();
+            _priceValue = _faker.Random.Decimal(50, 300);
+            _createdBy = _faker.Random.Int(1, 10);
+            _baseDate = DateTime.UtcNow;
+
         }
 
         /*
@@ -32,13 +46,13 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
             // Arrange
             var command = AddOrUpdateGameCommand.Create(
                 publicId: null,
-                description: "Jogo de ação e aventura",
+                description: _description,
                 genre: GameGenreEnum.ActionRPG,
-                releaseDate: DateTime.UtcNow,
-                developer: "Test Developer",
-                price: new Price(59.99m),
+                releaseDate: _baseDate,
+                developer: _developer,
+                price: new Price(_priceValue),
                 ageRating: new AgeRating("18+", 18),
-                createdBy: 1
+                createdBy: _createdBy
             );
 
             _gameRepositoryMock
@@ -70,26 +84,26 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
             var existingGameId = Guid.NewGuid();
             var existingGameCommand = AddOrUpdateGameCommand.Create(
                 publicId: existingGameId,
-                description: "Versão atualizada do jogo",
+                description: _description,
                 genre: GameGenreEnum.ActionRPG,
-                releaseDate: DateTime.UtcNow,
-                developer: "Updated Developer",
-                price: new Price(79.99m),
+                releaseDate: _baseDate,
+                developer: _developer,
+                price: new Price(_priceValue),
                 ageRating: new AgeRating("16+", 16),
-                createdBy: 1
+                createdBy: _createdBy
             );
 
             var existingGameEntity = Game.Create(
-                description: "Jogo original",
-                genre: GameGenreEnum.ActionRPG,
-                releaseDate: DateTime.UtcNow.AddDays(-1),
-                developer: "Updated Developer",
-                price: new Price(59.99m),
-                ageRating: new AgeRating("16+", 16),
-                createdBy: 1
+                description: _description,
+                genre: GameGenreEnum.BattleRoyale,
+                releaseDate: _baseDate.AddDays(-1),
+                developer: _developer,
+                price: new Price(_priceValue),
+                ageRating: new AgeRating("Livre", 0),
+                createdBy: _createdBy
             );
 
-            // Setup do GameExistsAsync para retornar false, porque o ID já existe
+            //// Setup do GameExistsAsync para retornar false, indicando que não há outro jogo duplicado
             _gameRepositoryMock
                 .Setup(r => r.GameExistsAsync(
                     existingGameCommand.PublicId,

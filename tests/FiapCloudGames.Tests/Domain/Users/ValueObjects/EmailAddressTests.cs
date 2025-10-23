@@ -1,20 +1,24 @@
-﻿using FiapCloudGames.Domain.Users.ValueObjects;
+﻿using Bogus;
+using FiapCloudGames.Domain.Users.ValueObjects;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
 {
     public class EmailAddressTests
     {
+        private readonly Faker _faker;
+        private readonly string _email;
+        public EmailAddressTests()
+        {
+            _faker = new Faker("pt_BR");
+            _email = _faker.Internet.Email();
+        }
+
         [Fact]
         public void Create_ShouldThrowException_WhenEmailIsEmpty()
         {
             // Arrange
-            string emptyEmail = "";
+            string emptyEmail = string.Empty;
 
             // Act
             Action act = () => EmailAddress.Create(emptyEmail);
@@ -42,7 +46,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldThrowException_WhenEmailMissingAtSymbol()
         {
             // Arrange
-            string invalidEmail = "testeemail.com";
+            string invalidEmail = _faker.Internet.Email().Replace("@", "");
 
             // Act
             Action act = () => EmailAddress.Create(invalidEmail);
@@ -56,7 +60,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldThrowException_WhenEmailMissingDotAfterAt()
         {
             // Arrange
-            string invalidEmail = "teste@com";
+            string invalidEmail = _faker.Internet.Email().Replace(".", "");
 
             // Act
             Action act = () => EmailAddress.Create(invalidEmail);
@@ -70,7 +74,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldReturnEmailAddress_WhenEmailValid()
         {
             // Arrange
-            string validEmail = "ana@example.com";
+            string validEmail = _email;
 
             // Act
             var emailObj = EmailAddress.Create(validEmail);
@@ -85,13 +89,13 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldTrimEmail_WhenEmailHasSpaces()
         {
             // Arrange
-            string emailWithSpaces = "  ana@example.com  ";
+            string emailWithSpaces = $"  {_email}  ";
 
             // Act
             var emailObj = EmailAddress.Create(emailWithSpaces);
 
             // Assert
-            emailObj.Email.Should().Be("ana@example.com");
+            emailObj.Email.Should().Be(_email);
         }
     }
 }
