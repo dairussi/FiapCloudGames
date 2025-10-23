@@ -1,15 +1,25 @@
-﻿using FiapCloudGames.Domain.Users.ValueObjects;
+﻿using Bogus;
+using FiapCloudGames.Domain.Users.ValueObjects;
 using FluentAssertions;
 
 namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
 {
     public class FullNameTests
     {
+        private readonly Faker _faker;
+        private readonly string _fullName;
+
+        public FullNameTests()
+        {
+            _faker = new Faker("pt_BR");
+            _fullName = _faker.Name.FullName();
+        }
+
         [Fact]
         public void Create_ShouldThrowException_WhenNameIsEmpty()
         {
             // Arrange
-            string emptyName = "";
+            string emptyName = string.Empty;
 
             // Act
             Action act = () => FullName.Create(emptyName);
@@ -23,7 +33,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldThrowException_WhenNameExceedsMaxLength()
         {
             // Arrange
-            string longName = new string('a', 101); // 101 caracteres
+            string longName = _faker.Random.String2(101); // 101 caracteres
 
             // Act
             Action act = () => FullName.Create(longName);
@@ -37,7 +47,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldThrowException_WhenNameDoesNotContainSpace()
         {
             // Arrange
-            string singleName = "Ana";
+            string singleName = _faker.Random.Word();
 
             // Act
             Action act = () => FullName.Create(singleName);
@@ -51,7 +61,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldReturnFullName_WhenNameIsValid()
         {
             // Arrange
-            string validName = "Ana Rios";
+            string validName = _fullName;
 
             // Act
             var fullName = FullName.Create(validName);

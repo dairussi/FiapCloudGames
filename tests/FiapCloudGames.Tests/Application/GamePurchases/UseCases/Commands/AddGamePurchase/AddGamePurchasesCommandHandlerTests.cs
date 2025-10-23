@@ -1,4 +1,5 @@
-﻿using FiapCloudGames.Application.Common.DTOs;
+﻿using Bogus;
+using FiapCloudGames.Application.Common.DTOs;
 using FiapCloudGames.Application.GamePurchases.UseCases.Commands.AddGamePurchase;
 using FiapCloudGames.Domain.Common.Ports;
 using FiapCloudGames.Domain.Common.ValueObjects;
@@ -21,6 +22,13 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
         private readonly Mock<IPromotionService> _promotionServiceMock;
         private readonly Mock<IUserContext> _userContextMock;
         private readonly AddGamePurchasesCommandHandler _handler;
+        private readonly Faker _faker;
+        private readonly string _description;
+        private readonly string _developer;
+        private readonly decimal _priceValue;
+        private readonly int _createdBy;
+        private readonly int _userId;
+        private readonly DateTime _baseDate;
 
         public AddGamePurchasesCommandHandlerTests()
         {
@@ -35,22 +43,30 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
                 _promotionServiceMock.Object,
                 _userContextMock.Object
             );
+
+            _faker = new Faker("pt_BR");
+            _description = _faker.Commerce.ProductName();
+            _developer = _faker.Company.CompanyName();
+            _priceValue = _faker.Random.Decimal(50, 300);
+            _createdBy = _faker.Random.Int(1, 10);
+            _userId = _faker.Random.Int(1, 10);
+            _baseDate = DateTime.UtcNow;
         }
 
         [Fact]
         public async Task Handle_ShouldCreateGamePurchase_WithCorrectFinalPrice()
         {
             // Cenário: Criar uma compra de jogo com promoção válida
-            var userId = 1;
+            var userId = _userId;
             var gameId = Guid.NewGuid();
             var game = Game.Create(
-                description: "Jogo Teste",
+                description: _description,
                 genre: GameGenreEnum.RPG,
-                releaseDate: DateTime.UtcNow,
-                developer: "Dev Test",
-                price: Price.Create(100m),
+                releaseDate: _baseDate,
+                developer: _developer,
+                price: Price.Create(100M),
                 ageRating: AgeRating.Create("16+"),
-                createdBy: 1
+                createdBy: _createdBy
             );
 
             _userContextMock.Setup(x => x.GetCurrentUserId()).Returns(userId);
@@ -89,16 +105,16 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
         [Fact]
         public async Task Handle_ShouldApplyPromotionCorrectly()
         {
-            var userId = 1;
+            var userId = _userId;
             var gameId = Guid.NewGuid();
             var game = Game.Create(
-                description: "Jogo Promo",
+                description: _description,
                 genre: GameGenreEnum.ActionRPG,
-                releaseDate: DateTime.UtcNow,
-                developer: "Dev Test",
-                price: Price.Create(200m),
+                releaseDate: _baseDate,
+                developer: _developer,
+                price: Price.Create(200M),
                 ageRating: AgeRating.Create("16+"),
-                createdBy: 1
+                createdBy: _createdBy
             );
 
             _userContextMock.Setup(x => x.GetCurrentUserId()).Returns(userId);
@@ -125,13 +141,13 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
             var userId = 1;
             var gameId = Guid.NewGuid();
             var game = Game.Create(
-                description: "Jogo Sem Promo",
+                description: _description,
                 genre: GameGenreEnum.RPG,
-                releaseDate: DateTime.UtcNow,
-                developer: "Dev Test",
-                price: Price.Create(120m),
+                releaseDate: _baseDate,
+                developer: _developer,
+                price: Price.Create(120M),
                 ageRating: AgeRating.Create("16+"),
-                createdBy: 1
+                createdBy: _createdBy
             );
 
             _userContextMock.Setup(x => x.GetCurrentUserId()).Returns(userId);

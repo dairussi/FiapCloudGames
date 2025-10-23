@@ -1,20 +1,23 @@
-﻿using FiapCloudGames.Domain.Common.ValueObjects;
+﻿using Bogus;
+using FiapCloudGames.Domain.Common.ValueObjects;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FiapCloudGames.Tests.Domain.Common.ValueObjects
 {
     public class PriceTests
     {
+        private readonly Faker _faker;
+
+        public PriceTests()
+        {
+            _faker = new Faker("pt_BR");
+        }
+
         [Fact]
         public void Create_ShouldThrowException_WhenPriceIsNegative()
         {
             // Arrange
-            decimal negativePrice = -50m;
+            decimal negativePrice = _faker.Random.Decimal(-1000, -0.01m);
 
             // Act
             Action act = () => Price.Create(negativePrice);
@@ -28,7 +31,7 @@ namespace FiapCloudGames.Tests.Domain.Common.ValueObjects
         public void Create_ShouldReturnPrice_WhenValueIsValid()
         {
             // Arrange
-            decimal validPrice = 99.99m;
+            decimal validPrice = _faker.Random.Decimal(0.01m, 10000m);
 
             // Act
             var price = Price.Create(validPrice);

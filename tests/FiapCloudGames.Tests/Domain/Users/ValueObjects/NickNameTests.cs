@@ -1,4 +1,5 @@
-﻿using FiapCloudGames.Domain.Users.ValueObjects;
+﻿using Bogus;
+using FiapCloudGames.Domain.Users.ValueObjects;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,20 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
 {
     public class NickNameTests
     {
+        private readonly Faker _faker;
+        private readonly string _nickName;
+
+        public NickNameTests()
+        {
+            _faker = new Faker("pt_BR");
+            _nickName = _faker.Internet.UserName();
+        }
+
         [Fact]
         public void Create_ShouldThrowException_WhenNickNameIsEmpty()
         {
             // Arrange
-            string emptyNick = "";
+            string emptyNick = string.Empty;
 
             // Act
             Action act = () => NickName.Create(emptyNick);
@@ -28,7 +38,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldThrowException_WhenNickNameExceedsMaxLength()
         {
             // Arrange
-            string longNick = new string('a', 101); // 101 caracteres
+            string longNick = _faker.Random.String2(101); 
 
             // Act
             Action act = () => NickName.Create(longNick);
@@ -42,7 +52,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldThrowException_WhenNickNameContainsSpaces()
         {
             // Arrange
-            string nickWithSpaces = "Ana Rios";
+            string nickWithSpaces = $"{_nickName}    {_nickName}"; 
 
             // Act
             Action act = () => NickName.Create(nickWithSpaces);
@@ -56,7 +66,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldReturnNickName_WhenNickNameIsValid()
         {
             // Arrange
-            string validNick = "Aninha123";
+            string validNick = _nickName;
 
             // Act
             var nick = NickName.Create(validNick);
