@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FiapCloudGames.csproj" />
+    <ProjectReference Include="..\FiapCloudGames\FiapCloudGames.csproj" />
   </ItemGroup>
 
 </Project>

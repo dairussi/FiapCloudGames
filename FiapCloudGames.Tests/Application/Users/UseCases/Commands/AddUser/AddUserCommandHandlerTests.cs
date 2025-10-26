@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
+using FiapCloudGames.Application.Users.Outputs;
 using FiapCloudGames.Domain.Common.Enuns;
 using FiapCloudGames.Domain.Common.Ports;
 using FiapCloudGames.Domain.Users.Entities;
@@ -37,10 +38,10 @@ namespace FiapCloudGames.Tests.Application.Users.UseCases.Commands.AddOrUpdateUs
         }
         /*
              * Nome: "Handle_ShouldAddUser_WhenUserDoesNotExist"
-             * Aqui testamos o método Handle() para garantir que, 
+             * Aqui testamos o método Handle() para garantir que,
              * quando o usuário não existir, o sistema chame AddAsync().
-             * 
-             * O teste cria mocks para o hash e repositório, 
+             *
+             * O teste cria mocks para o hash e repositório,
              * define que o usuário não existe, executa o handler e valida:
              * - Que o resultado é sucesso (ResultData.Success = true)
              * - Que AddAsync() foi chamado 1 vez
@@ -71,7 +72,7 @@ namespace FiapCloudGames.Tests.Application.Users.UseCases.Commands.AddOrUpdateUs
             // Assert
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
-            result.Data.Should().BeOfType<User>();
+            result.Data.Should().BeOfType<UserOutput>();
             _userRepositoryMock.Verify(r => r.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Once);
             _userRepositoryMock.Verify(r => r.Update(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Never);
         }
@@ -107,7 +108,7 @@ namespace FiapCloudGames.Tests.Application.Users.UseCases.Commands.AddOrUpdateUs
             // Assert
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
-            result.Data.Should().BeOfType<User>();
+            result.Data.Should().BeOfType<UserOutput>();
             _userRepositoryMock.Verify(r => r.Update(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Once);
             _userRepositoryMock.Verify(r => r.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Never);
         }

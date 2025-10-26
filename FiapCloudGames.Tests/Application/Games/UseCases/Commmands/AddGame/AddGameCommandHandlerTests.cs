@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
+using FiapCloudGames.Application.Games.Outputs;
 using FiapCloudGames.Domain.Common.ValueObjects;
 using FiapCloudGames.Domain.Games.Entities;
 using FiapCloudGames.Domain.Games.Enum;
@@ -38,7 +39,7 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
 
         /*
          * Nome: Handle_ShouldAddGame_WhenGameDoesNotExist
-         * 
+         *
          * Testa que, quando o jogo não existir (GameExistsAsync retorna false),
          * o handler chama AddAsync() e não chama Update().
          */
@@ -67,7 +68,7 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
             // Assert
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
-            result.Data.Should().BeOfType<Game>();
+            result.Data.Should().BeOfType<GameOutput>();
 
             _gameRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()), Times.Once);
             _gameRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()), Times.Never);
@@ -75,7 +76,7 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
 
         /*
          * Nome: Handle_ShouldUpdateGame_WhenGameAlreadyExists
-         * 
+         *
          * Testa que, quando o jogo já existir (GameExistsAsync retorna true),
          * o handler chama Update() e não chama AddAsync().
          */
@@ -130,7 +131,7 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
             // Assert
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
-            result.Data.Should().BeOfType<Game>();
+            result.Data.Should().BeOfType<GameOutput>();
 
             _gameRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()), Times.Once);
             _gameRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Game>(), It.IsAny<CancellationToken>()), Times.Never);

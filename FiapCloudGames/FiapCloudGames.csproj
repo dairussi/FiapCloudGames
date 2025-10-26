@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="tests\FiapCloudGames.Tests\Application\GamePurchases\UseCases\Commands\AddGamePurchase\" />
+	  
 	</ItemGroup>
 
 </Project>

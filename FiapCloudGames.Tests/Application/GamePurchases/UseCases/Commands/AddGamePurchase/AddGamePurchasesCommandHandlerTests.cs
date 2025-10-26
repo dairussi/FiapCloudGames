@@ -75,7 +75,12 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
             _promotionServiceMock.Setup(x => x.GetBestDiscountAsync(game.Price, gameId, userId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new PromotionServiceResult(1, Price.Create(20)));
             _gamePurchaseCommandRepositoryMock.Setup(x => x.AddAsync(It.IsAny<GamePurchase>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((GamePurchase gp, CancellationToken ct) => gp);
+                .ReturnsAsync((GamePurchase gp, CancellationToken ct) =>
+                {
+                    var prop = typeof(GamePurchase).GetProperty("Game", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                    prop!.SetValue(gp, game);
+                    return gp;
+                });
 
             var command = new AddGamePurchasesComand(gameId);
 
@@ -123,7 +128,12 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
             _promotionServiceMock.Setup(x => x.GetBestDiscountAsync(game.Price, gameId, userId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new PromotionServiceResult(5, Price.Create(50)));
             _gamePurchaseCommandRepositoryMock.Setup(x => x.AddAsync(It.IsAny<GamePurchase>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((GamePurchase gp, CancellationToken ct) => gp);
+                .ReturnsAsync((GamePurchase gp, CancellationToken ct) =>
+                {
+                    var prop = typeof(GamePurchase).GetProperty("Game", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                    prop!.SetValue(gp, game);
+                    return gp;
+                });
 
             var command = new AddGamePurchasesComand(gameId);
 
@@ -159,7 +169,12 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
                 .ReturnsAsync(new PromotionServiceResult(null, Price.Create(0m)));
 
             _gamePurchaseCommandRepositoryMock.Setup(x => x.AddAsync(It.IsAny<GamePurchase>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((GamePurchase gp, CancellationToken ct) => gp);
+                .ReturnsAsync((GamePurchase gp, CancellationToken ct) =>
+                {
+                    var prop = typeof(GamePurchase).GetProperty("Game", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                    prop!.SetValue(gp, game);
+                    return gp;
+                });
 
             var command = new AddGamePurchasesComand(gameId);
 

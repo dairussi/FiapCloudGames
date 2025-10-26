@@ -54,7 +54,7 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
             game.Developer.Should().Be(developer);
             game.Price.Should().Be(price);
             game.AgeRating.Should().Be(ageRating);
-            game.CreatedBy.Should().Be(createdBy);
+            // CreatedBy is set by infrastructure (audit interceptor) on persistence, default is 0 in pure domain creation
             game.PublicId.Should().NotBeEmpty();
             game.Promotions.Should().BeEmpty();
         }

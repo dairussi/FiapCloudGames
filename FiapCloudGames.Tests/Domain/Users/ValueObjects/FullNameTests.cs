@@ -1,4 +1,4 @@
-﻿using Bogus;
+using Bogus;
 using FiapCloudGames.Domain.Users.ValueObjects;
 using FluentAssertions;
 
@@ -47,7 +47,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
         public void Create_ShouldThrowException_WhenNameDoesNotContainSpace()
         {
             // Arrange
-            string singleName = _faker.Random.Word();
+            string singleName = _faker.Name.FirstName();
 
             // Act
             Action act = () => FullName.Create(singleName);
