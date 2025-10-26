@@ -24,6 +24,7 @@ using FiapCloudGames.Infraestructure.Adapters.Promotions.Repositories;
 using FiapCloudGames.Infraestructure.Adapters.Promotions.Services;
 using FiapCloudGames.Infraestructure.Adapters.Users.Repositories;
 using FiapCloudGames.Infraestructure.Persistence;
+using FiapCloudGames.Infraestructure.Persistence.Interceptors;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -40,9 +41,11 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 {
+    var userContext = serviceProvider.GetService<IUserContext>();
     options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+    options.AddInterceptors(new AuditInterceptor(userContext));
 }, ServiceLifetime.Scoped);
 
 builder.Services.AddHttpContextAccessor();

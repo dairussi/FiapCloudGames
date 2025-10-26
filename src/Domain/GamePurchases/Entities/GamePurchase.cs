@@ -16,6 +16,8 @@ public class GamePurchase : BaseEntity
         PromotionId = promotionId;
     }
     private GamePurchase() { }
+
+    public Guid PublicId { get; private set; } = Guid.NewGuid();
     public int UserId { get; private set; }
     public int GameId { get; private set; }
     public DateTime DataGamePurchase { get; private set; }

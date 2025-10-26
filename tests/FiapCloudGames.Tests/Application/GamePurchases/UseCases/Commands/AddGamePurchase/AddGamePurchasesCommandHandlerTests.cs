@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using FiapCloudGames.Application.Common.DTOs;
+using FiapCloudGames.Application.Common.Outputs;
 using FiapCloudGames.Application.GamePurchases.UseCases.Commands.AddGamePurchase;
 using FiapCloudGames.Domain.Common.Ports;
 using FiapCloudGames.Domain.Common.ValueObjects;
@@ -23,6 +23,7 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
         private readonly Mock<IUserContext> _userContextMock;
         private readonly AddGamePurchasesCommandHandler _handler;
         private readonly Faker _faker;
+        private readonly string _name;
         private readonly string _description;
         private readonly string _developer;
         private readonly decimal _priceValue;
@@ -60,19 +61,19 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
             var userId = _userId;
             var gameId = Guid.NewGuid();
             var game = Game.Create(
+                name: _name,
                 description: _description,
                 genre: GameGenreEnum.RPG,
                 releaseDate: _baseDate,
                 developer: _developer,
                 price: Price.Create(100M),
-                ageRating: AgeRating.Create("16+"),
-                createdBy: _createdBy
+                ageRating: AgeRating.Create("16+")
             );
 
             _userContextMock.Setup(x => x.GetCurrentUserId()).Returns(userId);
             _gameQueryRepositoryMock.Setup(x => x.GetByIdAsync(gameId, It.IsAny<CancellationToken>())).ReturnsAsync(game);
             _promotionServiceMock.Setup(x => x.GetBestDiscountAsync(game.Price, gameId, userId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new PromotionServiceResult(1,Price.Create(20)));
+                .ReturnsAsync(new PromotionServiceResult(1, Price.Create(20)));
             _gamePurchaseCommandRepositoryMock.Setup(x => x.AddAsync(It.IsAny<GamePurchase>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((GamePurchase gp, CancellationToken ct) => gp);
 
@@ -81,7 +82,7 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
             var result = await _handler.Handle(command, CancellationToken.None);
 
             result.IsSuccess.Should().BeTrue();
-            result.Data.FinalPrice.Value.Should().Be(80); // 100 - 20
+            result.Data.FinalPrice.Should().Be(80); // 100 - 20
             result.Data.PromotionValue!.Value.Should().Be(20);
         }
 
@@ -108,19 +109,19 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
             var userId = _userId;
             var gameId = Guid.NewGuid();
             var game = Game.Create(
+                name: _name,
                 description: _description,
                 genre: GameGenreEnum.ActionRPG,
                 releaseDate: _baseDate,
                 developer: _developer,
                 price: Price.Create(200M),
-                ageRating: AgeRating.Create("16+"),
-                createdBy: _createdBy
+                ageRating: AgeRating.Create("16+")
             );
 
             _userContextMock.Setup(x => x.GetCurrentUserId()).Returns(userId);
             _gameQueryRepositoryMock.Setup(x => x.GetByIdAsync(gameId, It.IsAny<CancellationToken>())).ReturnsAsync(game);
             _promotionServiceMock.Setup(x => x.GetBestDiscountAsync(game.Price, gameId, userId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new PromotionServiceResult(5,Price.Create(50)));
+                .ReturnsAsync(new PromotionServiceResult(5, Price.Create(50)));
             _gamePurchaseCommandRepositoryMock.Setup(x => x.AddAsync(It.IsAny<GamePurchase>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((GamePurchase gp, CancellationToken ct) => gp);
 
@@ -129,9 +130,8 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
             var result = await _handler.Handle(command, CancellationToken.None);
 
             result.IsSuccess.Should().BeTrue();
-            result.Data.FinalPrice.Value.Should().Be(150); // 200 - 50
+            result.Data.FinalPrice.Should().Be(150); // 200 - 50
             result.Data.PromotionValue!.Value.Should().Be(50);
-            result.Data.PromotionId.Should().Be(5);
         }
 
         [Fact]
@@ -141,13 +141,13 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
             var userId = 1;
             var gameId = Guid.NewGuid();
             var game = Game.Create(
+                name: _name,
                 description: _description,
                 genre: GameGenreEnum.RPG,
                 releaseDate: _baseDate,
                 developer: _developer,
                 price: Price.Create(120M),
-                ageRating: AgeRating.Create("16+"),
-                createdBy: _createdBy
+                ageRating: AgeRating.Create("16+")
             );
 
             _userContextMock.Setup(x => x.GetCurrentUserId()).Returns(userId);
@@ -166,9 +166,8 @@ namespace FiapCloudGames.Tests.Application.GamePurchases.UseCases.Commands.AddGa
             var result = await _handler.Handle(command, CancellationToken.None);
 
             result.IsSuccess.Should().BeTrue();
-            result.Data.FinalPrice.Value.Should().Be(120); // Sem desconto
+            result.Data.FinalPrice.Should().Be(120); // Sem desconto
             result.Data.PromotionValue!.Value.Should().Be(0); // Promoção zerada
-            result.Data.PromotionId.Should().BeNull();
         }
 
     }

@@ -26,4 +26,3 @@ public record ValidityPeriod
         return now >= StartDate && now <= EndDate;
     }
 }
-

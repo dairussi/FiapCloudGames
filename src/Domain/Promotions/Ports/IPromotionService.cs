@@ -1,4 +1,4 @@
-using FiapCloudGames.Application.Common.DTOs;
+using FiapCloudGames.Application.Common.Outputs;
 using FiapCloudGames.Domain.Common.ValueObjects;
 
 namespace FiapCloudGames.Domain.Promotions.Ports;

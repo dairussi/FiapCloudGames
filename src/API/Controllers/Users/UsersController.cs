@@ -10,27 +10,28 @@ namespace FiapCloudGames.API.Controllers.Users;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UsersController : ControllerBase
 {
-    [HttpGet("{publicId}")]
-    public async Task<IActionResult> GetUserById(
-    [FromRoute] Guid publicId,
-    [FromServices] IGetUserByIdQueryHandler handler,
-    CancellationToken cancellationToken)
+    [HttpGet]
+    public async Task<IActionResult> GetUsersPaged(
+    [FromServices] IGetUsersPagedQueryHandler handler,
+    CancellationToken cancellationToken,
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10)
     {
-        var query = new GetUserByIdQuery(publicId);
+        var query = new GetUsersPagedQuery(page, pageSize);
         var result = await handler.Handle(query, cancellationToken);
         return result.ToOkActionResult();
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetUsersPaged(
-        [FromServices] IGetUsersPagedQueryHandler handler,
-        CancellationToken cancellationToken,
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 10)
+    [HttpGet("{publicId}")]
+    public async Task<IActionResult> GetUserById(
+        [FromRoute] Guid publicId,
+        [FromServices] IGetUserByIdQueryHandler handler,
+        CancellationToken cancellationToken)
     {
-        var query = new GetUsersPagedQuery(page, pageSize);
+        var query = new GetUserByIdQuery(publicId);
         var result = await handler.Handle(query, cancellationToken);
         return result.ToOkActionResult();
     }
@@ -47,7 +48,8 @@ public class UsersController : ControllerBase
         return result.ToCreatedActionResult($"/api/users/{result.Data.PublicId}");
     }
 
-    [HttpPatch("{publicId}")]
+    [Authorize(Roles = nameof(EUserRole.Admin))]
+    [HttpPatch("{publicId}/deactivate")]
     public async Task<IActionResult> DeactivateUser(
         [FromRoute] Guid publicId,
         [FromServices] IDeactivateUserCommandHandler handler,
@@ -57,4 +59,5 @@ public class UsersController : ControllerBase
         var result = await handler.Handle(command, cancellationToken);
         return result.ToNoContentActionResult();
     }
+
 }

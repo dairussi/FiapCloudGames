@@ -1,6 +1,8 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Promotions.Ports;
+using FiapCloudGames.Application.Promotions.Mappers;
+using FiapCloudGames.Application.Promotions.Outputs;
 using FiapCloudGames.Domain.Promotions.Entities;
+using FiapCloudGames.Domain.Promotions.Ports;
 
 namespace FiapCloudGames.Application.Promotions.UseCases.Commands.AddPromotion;
 
@@ -13,7 +15,7 @@ public class AddOrUpdatePromotionCommandHandler : IAddOrUpdatePromotionCommandHa
         _promotionCommandRepository = promotionCommandRepository;
     }
 
-    public async Task<ResultData<Promotion>> Handle(AddOrUpdatePromotionCommand command, CancellationToken cancellationToken)
+    public async Task<ResultData<PromotionOutput>> Handle(AddOrUpdatePromotionCommand command, CancellationToken cancellationToken)
     {
         var promotionExists = command.PublicId is not null
             && await _promotionCommandRepository.PromotionExistsAsync(command.PublicId, cancellationToken);
@@ -26,6 +28,8 @@ public class AddOrUpdatePromotionCommandHandler : IAddOrUpdatePromotionCommandHa
         else
             await _promotionCommandRepository.AddAsync(promotion, cancellationToken);
 
-        return ResultData<Promotion>.Success(promotion);
+        var promotionOutput = promotion.ToOutput();
+
+        return ResultData<PromotionOutput>.Success(promotionOutput);
     }
 }

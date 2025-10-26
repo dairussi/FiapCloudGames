@@ -1,5 +1,6 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Users.Entities;
+using FiapCloudGames.Application.Users.Mappers;
+using FiapCloudGames.Application.Users.Outputs;
 using FiapCloudGames.Domain.Users.Ports;
 
 namespace FiapCloudGames.Application.Users.UseCases.Commands.DeactivateUser;
@@ -11,16 +12,18 @@ public class DeactivateUserCommandHandler : IDeactivateUserCommandHandler
     {
         _userCommandRepository = userCommandRepository;
     }
-    public async Task<ResultData<User>> Handle(DeactivateUserCommand command, CancellationToken cancellationToken)
+    public async Task<ResultData<UserOutput>> Handle(DeactivateUserCommand command, CancellationToken cancellationToken)
     {
         var user = await _userCommandRepository.GetByIdAsync(command.PublicId, cancellationToken);
 
         if (user is null)
-            return ResultData<User>.Error("Usuário não encontrado.");
+            return ResultData<UserOutput>.Error("Usuário não encontrado.");
 
         user.Deactivate();
         await _userCommandRepository.Update(user, cancellationToken);
 
-        return ResultData<User>.SuccessNoContent();
+        var userOutput = user.ToOutput();
+
+        return ResultData<UserOutput>.Success(userOutput);
     }
 }

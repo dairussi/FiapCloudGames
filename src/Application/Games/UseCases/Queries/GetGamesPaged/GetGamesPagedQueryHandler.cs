@@ -1,10 +1,11 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Games.Entities;
+using FiapCloudGames.Application.Games.Mappers;
+using FiapCloudGames.Application.Games.Outputs;
 using FiapCloudGames.Domain.Games.Ports;
 
 namespace FiapCloudGames.Application.Games.UseCases.Queries.GetGamesPaged;
 
-public class GetGamesPagedQueryHandler :IGetGamesPagedQueryHandler
+public class GetGamesPagedQueryHandler : IGetGamesPagedQueryHandler
 {
     private readonly IGameQueryRepository _gameQueryRepository;
 
@@ -13,11 +14,21 @@ public class GetGamesPagedQueryHandler :IGetGamesPagedQueryHandler
         _gameQueryRepository = gameQueryRepository;
     }
 
-    public async Task<ResultData<PagedResult<Game>>> Handle (GetGamesPagedQuery query, CancellationToken cancellationToken)
+    public async Task<ResultData<PagedResult<GameOutput>>> Handle(GetGamesPagedQuery query, CancellationToken cancellationToken)
     {
         var pagedResult = await _gameQueryRepository.GetPagedAsync(query.Page, query.PageSize, cancellationToken);
 
-        return ResultData<PagedResult<Game>>.Success(pagedResult);
+        var items = pagedResult.Items.ToOutput();
+
+        var pagedResultGameOutput = new PagedResult<GameOutput>
+        {
+            Items = items,
+            Page = pagedResult.Page,
+            PageSize = pagedResult.PageSize,
+            TotalCount = pagedResult.TotalCount
+        };
+
+        return ResultData<PagedResult<GameOutput>>.Success(pagedResultGameOutput);
     }
 
 }

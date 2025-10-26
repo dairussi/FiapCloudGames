@@ -1,9 +1,9 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Games.Entities;
+using FiapCloudGames.Application.Games.Outputs;
 
 namespace FiapCloudGames.Application.Games.UseCases.Commands.AddGame;
 
 public interface IAddOrUpdateGameCommandHandler
 {
-    Task<ResultData<Game>> Handle(AddOrUpdateGameCommand command, CancellationToken cancellationToken);
+    Task<ResultData<GameOutput>> Handle(AddOrUpdateGameCommand command, CancellationToken cancellationToken);
 }

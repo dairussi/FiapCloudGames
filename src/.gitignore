@@ -1,0 +1,75 @@
+############################
+# Build / Compilação
+############################
+# Ignora binários e artefatos de compilação em qualquer pasta
+**/bin/
+**/obj/
+**/out/
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+
+############################
+# IDEs (Visual Studio / VS Code)
+############################
+# Visual Studio
+.vs/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+############################
+# Usuário / Ambiente local
+############################
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+############################
+# Pacotes NuGet
+############################
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+*.nuget.props
+*.nuget.targets
+
+############################
+# Build outputs / Binaries
+############################
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+
+############################
+# Sistema Operacional
+############################
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+############################
+# Outros opcionais
+############################
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Backups
+*.bak
+*.old
+*.orig

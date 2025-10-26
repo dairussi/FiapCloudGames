@@ -11,7 +11,7 @@ public class GameCommandRepository : IGameCommandRepository
 
     public GameCommandRepository(AppDbContext dbContext)
     {
-        _dbContext = dbContext; 
+        _dbContext = dbContext;
     }
 
     public async Task<Game> AddAsync(Game game, CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ public class GameCommandRepository : IGameCommandRepository
 
     public async Task<Game> UpdateAsync(Game game, CancellationToken cancellationToken)
     {
-         _dbContext.Games.Update(game);
+        _dbContext.Games.Update(game);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return game;
 
@@ -46,9 +46,9 @@ public class GameCommandRepository : IGameCommandRepository
         }
         catch (InvalidOperationException e)
         {
-            throw new KeyNotFoundException($"O jogo com o PublicId '{publicId}' não foi encontrado.",e.InnerException);
+            throw new KeyNotFoundException($"O jogo com o PublicId '{publicId}' não foi encontrado.", e.InnerException);
         }
-        
+
 
 
     }

@@ -1,8 +1,8 @@
-using FiapCloudGames.Domain.Users.Entities;
-using FiapCloudGames.Domain.Games.Entities;
-using Microsoft.EntityFrameworkCore;
-using FiapCloudGames.Domain.Promotions.Entities;
 using FiapCloudGames.Domain.GamePurchases.Entities;
+using FiapCloudGames.Domain.Games.Entities;
+using FiapCloudGames.Domain.Promotions.Entities;
+using FiapCloudGames.Domain.Users.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FiapCloudGames.Infraestructure.Persistence;
 

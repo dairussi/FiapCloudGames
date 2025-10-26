@@ -10,6 +10,7 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
     public class GameTests
     {
         private readonly Faker _faker;
+        private readonly string _name;
         private readonly string _description;
         private readonly string _developer;
         private readonly decimal _priceValue;
@@ -19,6 +20,7 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
         public GameTests()
         {
             _faker = new Faker("pt_BR");
+            _name = _faker.Name.FullName();
             _description = _faker.Commerce.ProductName();
             _developer = _faker.Company.CompanyName();
             _priceValue = _faker.Random.Decimal(50, 300);
@@ -32,6 +34,7 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
         {
             // Arrange
             var description = _description;
+            var name = _name;
             var genre = GameGenreEnum.ActionRPG;
             var releaseDate = _baseDate;
             var developer = _developer;
@@ -40,10 +43,11 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
             var createdBy = _createdBy;
 
             // Act
-            var game = Game.Create(description, genre, releaseDate, developer, price, ageRating, createdBy);
+            var game = Game.Create(name, description, genre, releaseDate, developer, price, ageRating);
 
             // Assert
             game.Should().NotBeNull();
+            game.Name.Should().Be(name);
             game.Description.Should().Be(description);
             game.Genre.Should().Be(genre);
             game.ReleaseDate.Should().Be(releaseDate);
@@ -60,15 +64,16 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
         {
             // Arrange
             var game = Game.Create(
+                _name,
                 _description,
                 GameGenreEnum.RPG,
                 _baseDate.AddDays(-1),
                 _developer,
                 new Price(_priceValue),
-                new AgeRating("12+", 12),
-                _createdBy
+                new AgeRating("12+", 12)
             );
 
+            var newName = _name;
             var newDescription = _description;
             var newGenre = GameGenreEnum.Racing;
             var newReleaseDate = _baseDate;
@@ -77,9 +82,10 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
             var newAgeRating = new AgeRating("10+", 10);
 
             // Act
-            game.UpdateDetails(newDescription, newGenre, newReleaseDate, newDeveloper, newPrice, newAgeRating);
+            game.UpdateDetails(newName, newDescription, newGenre, newReleaseDate, newDeveloper, newPrice, newAgeRating);
 
             // Assert
+            game.Name.Should().Be(newName);
             game.Description.Should().Be(newDescription);
             game.Genre.Should().Be(newGenre);
             game.ReleaseDate.Should().Be(newReleaseDate);
@@ -93,22 +99,22 @@ namespace FiapCloudGames.Tests.Domain.Games.Entities
         {
             // Act
             var game1 = Game.Create(
+                _name,
                 _description,
                 GameGenreEnum.RPG,
                 _baseDate,
                _developer,
                 new Price(_priceValue),
-                new AgeRating("12+", 12),
-                _createdBy
+                new AgeRating("12+", 12)
             );
             var game2 = Game.Create(
+                _name,
                 _description,
                 GameGenreEnum.ActionRPG,
                 _baseDate,
                 _developer,
                 new Price(_priceValue),
-                new AgeRating("16+", 16),
-                _createdBy
+                new AgeRating("16+", 16)
             );
 
             // Assert

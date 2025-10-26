@@ -1,4 +1,6 @@
 using FiapCloudGames.Application.Common;
+using FiapCloudGames.Application.Users.Mappers;
+using FiapCloudGames.Application.Users.Outputs;
 using FiapCloudGames.Domain.Common.Ports;
 using FiapCloudGames.Domain.Users.Entities;
 using FiapCloudGames.Domain.Users.Ports;
@@ -14,7 +16,7 @@ public class AddOrUpdateUserCommandHandler : IAddOrUpdateUserCommandHandler
         _hashHelper = hashHelper;
         _userCommandRepository = userCommandRepository;
     }
-    public async Task<ResultData<User>> Handle(AddOrUpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task<ResultData<UserOutput>> Handle(AddOrUpdateUserCommand command, CancellationToken cancellationToken)
     {
         var userExists = command.PublicId is not null
         && await _userCommandRepository.UserExistsAsync(command.PublicId, cancellationToken);
@@ -27,6 +29,8 @@ public class AddOrUpdateUserCommandHandler : IAddOrUpdateUserCommandHandler
         else
             await _userCommandRepository.AddAsync(user, cancellationToken);
 
-        return ResultData<User>.Success(user);
+        var userOutput = user.ToOutput();
+
+        return ResultData<UserOutput>.Success(userOutput);
     }
 }

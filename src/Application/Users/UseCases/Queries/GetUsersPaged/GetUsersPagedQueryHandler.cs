@@ -1,8 +1,7 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Users.Entities;
+using FiapCloudGames.Application.Users.Mappers;
+using FiapCloudGames.Application.Users.Outputs;
 using FiapCloudGames.Domain.Users.Ports;
-using FiapCloudGames.Infraestructure.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace FiapCloudGames.Application.Users.UseCases.Queries.GetUsersPaged;
 
@@ -13,14 +12,24 @@ public class GetUsersPagedQueryHandler : IGetUsersPagedQueryHandler
     {
         _userQueryRepository = userQueryRepository;
     }
-    public async Task<ResultData<PagedResult<User>>> Handle(GetUsersPagedQuery query, CancellationToken cancellationToken)
+    public async Task<ResultData<PagedResult<UserOutput>>> Handle(GetUsersPagedQuery query, CancellationToken cancellationToken)
     {
         var pagedResult = await _userQueryRepository.GetPagedAsync(
                 query.Page,
                 query.PageSize,
                 cancellationToken);
 
-        return ResultData<PagedResult<User>>.Success(pagedResult);
+        var items = pagedResult.Items.ToOutput();
+
+        var pagedResultOutput = new PagedResult<UserOutput>
+        {
+            Items = items,
+            Page = pagedResult.Page,
+            PageSize = pagedResult.PageSize,
+            TotalCount = pagedResult.TotalCount
+        };
+
+        return ResultData<PagedResult<UserOutput>>.Success(pagedResultOutput);
 
     }
 }

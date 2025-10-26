@@ -1,9 +1,9 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Promotions.Entities;
+using FiapCloudGames.Application.Promotions.Outputs;
 
 namespace FiapCloudGames.Application.Promotions.UseCases.Queries.GetPromotionById;
 
 public interface IGetPromotionByIdQueryHandler
 {
-    Task<ResultData<Promotion>> Handle(GetPromotionByIdQuery query, CancellationToken cancellationToken);
+    Task<ResultData<PromotionOutput>> Handle(GetPromotionByIdQuery query, CancellationToken cancellationToken);
 }

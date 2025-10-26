@@ -1,10 +1,10 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Promotions.Entities;
+using FiapCloudGames.Application.Promotions.Outputs;
 
 
 namespace FiapCloudGames.Application.Promotions.UseCases.Queries.GetPromotionsPaged;
 
 public interface IGetPromotionsPagedQueryHandler
 {
-    Task<ResultData<PagedResult<Promotion>>> Handle(GetPromotionsPagedQuery query, CancellationToken cancellationToken);
+    Task<ResultData<PagedResult<PromotionOutput>>> Handle(GetPromotionsPagedQuery query, CancellationToken cancellationToken);
 }

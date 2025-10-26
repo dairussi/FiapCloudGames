@@ -9,16 +9,9 @@ namespace FiapCloudGames.API.Controllers.Games;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class GamesController : ControllerBase
 {
-
-    [HttpGet("{publicId}")]
-    public async Task<IActionResult> GetGameById([FromRoute] Guid publicId, [FromServices] IGetGameByIdQueryHandler handler, CancellationToken cancellationToken)
-    {
-        var query = new GetGameByIdQuery(publicId);
-        var result = await handler.Handle(query, cancellationToken);
-        return result.ToOkActionResult();
-    }
 
     [HttpGet]
     public async Task<IActionResult> GetGamesPaged(
@@ -30,6 +23,17 @@ public class GamesController : ControllerBase
         var query = new GetGamesPagedQuery(page, pageSize);
         var result = await handler.Handle(query, cancellationToken);
 
+        return result.ToOkActionResult();
+    }
+
+    [HttpGet("{publicId}")]
+    public async Task<IActionResult> GetGameById(
+        [FromRoute] Guid publicId,
+        [FromServices] IGetGameByIdQueryHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetGameByIdQuery(publicId);
+        var result = await handler.Handle(query, cancellationToken);
         return result.ToOkActionResult();
     }
 

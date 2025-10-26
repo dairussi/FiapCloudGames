@@ -1,4 +1,6 @@
 using FiapCloudGames.Application.Common;
+using FiapCloudGames.Application.GamePurchases.Mappers;
+using FiapCloudGames.Application.GamePurchases.Outputs;
 using FiapCloudGames.Domain.Common.Ports;
 using FiapCloudGames.Domain.Common.ValueObjects;
 using FiapCloudGames.Domain.GamePurchases.Entities;
@@ -25,14 +27,13 @@ public class AddGamePurchasesCommandHandler : IAddGamePurchasesCommandHandler
         _promotionService = promotionService;
         _userContext = userContext;
     }
-    public async Task<ResultData<GamePurchase>> Handle(AddGamePurchasesComand command, CancellationToken cancellationToken)
+    public async Task<ResultData<GamePurchaseOutput>> Handle(AddGamePurchasesComand command, CancellationToken cancellationToken)
     {
-        //implementar pagamento
         var userId = _userContext.GetCurrentUserId();
         var game = await _gameQueryRepository.GetByIdAsync(command.GameId, cancellationToken);
 
         if (game == null)
-            return ResultData<GamePurchase>.Error("Jogo não encontrado.");
+            return ResultData<GamePurchaseOutput>.Error("Jogo não encontrado.");
 
         var bestPromotion = await _promotionService.GetBestDiscountAsync(game.Price, command.GameId, userId, cancellationToken);
 
@@ -42,6 +43,8 @@ public class AddGamePurchasesCommandHandler : IAddGamePurchasesCommandHandler
 
         await _gamePurchaseCommandRepository.AddAsync(gamePurchase, cancellationToken);
 
-        return ResultData<GamePurchase>.Success(gamePurchase);
+        var gamePurchaseOutput = gamePurchase.ToOutput();
+
+        return ResultData<GamePurchaseOutput>.Success(gamePurchaseOutput);
     }
 }

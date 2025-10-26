@@ -1,6 +1,7 @@
 using FiapCloudGames.Application.Common;
+using FiapCloudGames.Application.GamePurchases.Mappers;
+using FiapCloudGames.Application.GamePurchases.Outputs;
 using FiapCloudGames.Domain.Common.Ports;
-using FiapCloudGames.Domain.GamePurchases.Entities;
 using FiapCloudGames.Domain.GamePurchases.Ports;
 
 namespace FiapCloudGames.Application.GamePurchases.UseCases.Queries;
@@ -14,12 +15,22 @@ public class GetByUserGamePurchasesQueryHandler : IGetByUserGamePurchasesQueryHa
         _gamePurchaseQueryRepository = gamePurchaseQueryRepository;
         _userContext = userContext;
     }
-    public async Task<ResultData<PagedResult<GamePurchase>>> Handle(GetByUserGamePurchaseQuery query, CancellationToken cancellationToken)
+    public async Task<ResultData<PagedResult<GamePurchaseOutput>>> Handle(GetByUserGamePurchaseQuery query, CancellationToken cancellationToken)
     {
         var userId = _userContext.GetCurrentUserId();
 
-        var gamePurchase = await _gamePurchaseQueryRepository.GetByUserGamePurchasesAsync(query.Page, query.PageSize, userId, cancellationToken);
+        var pagedResult = await _gamePurchaseQueryRepository.GetByUserGamePurchasesAsync(query.Page, query.PageSize, userId, cancellationToken);
 
-        return ResultData<PagedResult<GamePurchase>>.Success(gamePurchase);
+        var items = pagedResult.Items.ToOutput();
+
+        var pagedResultGamePurchaseOutput = new PagedResult<GamePurchaseOutput>
+        {
+            Items = items,
+            Page = pagedResult.Page,
+            PageSize = pagedResult.PageSize,
+            TotalCount = pagedResult.TotalCount
+        };
+
+        return ResultData<PagedResult<GamePurchaseOutput>>.Success(pagedResultGamePurchaseOutput);
     }
 }

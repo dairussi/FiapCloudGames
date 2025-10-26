@@ -1,5 +1,6 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Users.Entities;
+using FiapCloudGames.Application.Users.Mappers;
+using FiapCloudGames.Application.Users.Outputs;
 using FiapCloudGames.Domain.Users.Ports;
 
 namespace FiapCloudGames.Application.Users.UseCases.Queries.GetUserById;
@@ -11,16 +12,18 @@ public class GetUserByIdQueryHandler : IGetUserByIdQueryHandler
     {
         _userQueryRepository = userQueryRepository;
     }
-    public async Task<ResultData<User>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
+    public async Task<ResultData<UserOutput>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
     {
         var user = await _userQueryRepository.GetByIdAsync(query.PublicId, cancellationToken);
 
         if (user is null)
         {
-            return ResultData<User>.Error("Usuário não encontrado.");
+            return ResultData<UserOutput>.Error("Usuário não encontrado.");
         }
 
-        return ResultData<User>.Success(user);
+        var userOutput = user.ToOutput();
+
+        return ResultData<UserOutput>.Success(userOutput);
 
     }
 }

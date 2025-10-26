@@ -12,7 +12,7 @@ public class AuthController : ControllerBase
     {
         _loginUserQueryHandler = loginUserQueryHandler;
     }
-    //TODO devo mudar para command pensando nas persistencias futuras e edição de estado?
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserQueryInput input, CancellationToken cancellationToken)
     {

@@ -2,7 +2,7 @@ namespace FiapCloudGames.Domain.Games.ValueObjects;
 
 public class AgeRating
 {
-    public AgeRating(string rating, int minimiumAge )
+    public AgeRating(string rating, int minimiumAge)
     {
         Rating = rating;
         MinimiumAge = minimiumAge;

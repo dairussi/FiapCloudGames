@@ -1,4 +1,4 @@
-using FiapCloudGames.Application.Common.DTOs;
+using FiapCloudGames.Application.Common.Outputs;
 using FiapCloudGames.Domain.Common.ValueObjects;
 using FiapCloudGames.Domain.Games.Ports;
 using FiapCloudGames.Domain.Promotions.Enum;

@@ -23,6 +23,12 @@ public class GamePurchaseConfigurations : IEntityTypeConfiguration<GamePurchase>
         builder.Property(gp => gp.CreatedBy)
             .IsRequired();
 
+        builder.Property(gp => gp.PublicId)
+            .IsRequired();
+
+        builder.HasIndex(gp => gp.PublicId)
+            .IsUnique();
+
         builder.Property(gp => gp.UserId)
             .IsRequired();
 
