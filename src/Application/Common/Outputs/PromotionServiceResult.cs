@@ -1,6 +1,6 @@
 using FiapCloudGames.Domain.Common.ValueObjects;
 
-namespace FiapCloudGames.Application.Common.DTOs;
+namespace FiapCloudGames.Application.Common.Outputs;
 
 public class PromotionServiceResult
 {

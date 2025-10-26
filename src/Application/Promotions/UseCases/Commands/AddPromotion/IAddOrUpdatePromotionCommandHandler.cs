@@ -1,9 +1,9 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Promotions.Entities;
+using FiapCloudGames.Application.Promotions.Outputs;
 
 namespace FiapCloudGames.Application.Promotions.UseCases.Commands.AddPromotion;
 
 public interface IAddOrUpdatePromotionCommandHandler
 {
-    Task<ResultData<Promotion>> Handle(AddOrUpdatePromotionCommand command, CancellationToken cancellationToken);
+    Task<ResultData<PromotionOutput>> Handle(AddOrUpdatePromotionCommand command, CancellationToken cancellationToken);
 }

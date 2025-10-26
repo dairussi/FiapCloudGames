@@ -1,7 +1,6 @@
 using FiapCloudGames.Domain.GamePurchases.Entities;
 using FiapCloudGames.Domain.GamePurchases.Ports;
 using FiapCloudGames.Infraestructure.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace FiapCloudGames.Infraestructure.Adapters.GamePurchases;
 

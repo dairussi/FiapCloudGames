@@ -23,9 +23,9 @@ public class Promotion : BaseEntity
     public ICollection<Game> Games { get; set; } = [];
     public ICollection<User> Users { get; set; } = [];
     public Guid PublicId { get; private set; } = Guid.NewGuid();
-    public ValidityPeriod Period { get; private set; }
-    public DiscountRule DiscountRule { get; private set; }
-    public string Description { get; private set; }
+    public ValidityPeriod Period { get; private set; } = default!;
+    public DiscountRule DiscountRule { get; private set; } = default!;
+    public string Description { get; private set; } = default!;
     public PromotionStatusEnum Status { get; private set; }
 
     public static Promotion Create(string description, ValidityPeriod period, DiscountRule discountRule)

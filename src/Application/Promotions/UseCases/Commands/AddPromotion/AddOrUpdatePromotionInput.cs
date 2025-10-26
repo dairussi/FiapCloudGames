@@ -16,7 +16,7 @@ public class AddOrUpdatePromotionInput
 
     public AddOrUpdatePromotionCommand MapToCommand()
     {
-        if(!Enum.TryParse(DiscountType, true, out DiscountTypeEnum discountTypeEnum))
+        if (!Enum.TryParse(DiscountType, true, out DiscountTypeEnum discountTypeEnum))
             throw new ArgumentException("Tipo de desconto inválido.", nameof(DiscountType));
 
         if (!Enum.TryParse(Status, true, out PromotionStatusEnum promotionStatusEnum))

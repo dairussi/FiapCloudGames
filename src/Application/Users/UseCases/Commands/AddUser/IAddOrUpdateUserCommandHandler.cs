@@ -1,9 +1,9 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Users.Entities;
+using FiapCloudGames.Application.Users.Outputs;
 
 namespace FiapCloudGames.Application.Users.UseCases.Commands.AddOrUpdateUser;
 
 public interface IAddOrUpdateUserCommandHandler
 {
-    Task<ResultData<User>> Handle(AddOrUpdateUserCommand command, CancellationToken cancellationToken);
+    Task<ResultData<UserOutput>> Handle(AddOrUpdateUserCommand command, CancellationToken cancellationToken);
 }

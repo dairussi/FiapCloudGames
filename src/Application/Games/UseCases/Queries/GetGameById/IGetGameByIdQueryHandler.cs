@@ -1,9 +1,9 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Games.Entities;
+using FiapCloudGames.Application.Games.Outputs;
 
 namespace FiapCloudGames.Application.Games.UseCases.Queries.GetGameById;
 
 public interface IGetGameByIdQueryHandler
 {
-    Task<ResultData<Game>> Handle(GetGameByIdQuery query, CancellationToken cancellationToken);
+    Task<ResultData<GameOutput>> Handle(GetGameByIdQuery query, CancellationToken cancellationToken);
 }

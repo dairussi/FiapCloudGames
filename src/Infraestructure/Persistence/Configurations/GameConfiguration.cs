@@ -28,6 +28,10 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
         builder.HasIndex(g => g.PublicId)
             .IsUnique();
 
+        builder.Property(g => g.Name)
+            .IsRequired()
+            .HasMaxLength(200);
+
         builder.Property(g => g.Description)
           .IsRequired()
           .HasMaxLength(500);

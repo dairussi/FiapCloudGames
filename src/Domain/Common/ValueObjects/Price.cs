@@ -1,5 +1,3 @@
-using System.Net.NetworkInformation;
-
 namespace FiapCloudGames.Domain.Common.ValueObjects;
 
 public class Price

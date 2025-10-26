@@ -9,31 +9,31 @@ namespace FiapCloudGames.API.Controllers.Promotions;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PromotionsController : ControllerBase
 {
-    [HttpGet("{publicId}")]
-    public async Task<IActionResult> GetPromotionById(
-    [FromRoute] Guid publicId,
-    [FromServices] IGetPromotionByIdQueryHandler handler,
-    CancellationToken cancellationToken)
-    {
-        var query = new GetPromotionByIdQuery(publicId);
-        var result = await handler.Handle(query, cancellationToken);
-        return result.ToOkActionResult();
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetPromotionsPaged(
-    [FromServices] IGetPromotionsPagedQueryHandler handler,
-    CancellationToken cancellationToken,
-    [FromQuery] int page = 1,
-    [FromQuery] int pageSize = 10)
+        [FromServices] IGetPromotionsPagedQueryHandler handler,
+        CancellationToken cancellationToken,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10)
     {
         var query = new GetPromotionsPagedQuery(page, pageSize);
         var result = await handler.Handle(query, cancellationToken);
         return result.ToOkActionResult();
     }
 
+    [HttpGet("{publicId}")]
+    public async Task<IActionResult> GetPromotionById(
+        [FromRoute] Guid publicId,
+        [FromServices] IGetPromotionByIdQueryHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetPromotionByIdQuery(publicId);
+        var result = await handler.Handle(query, cancellationToken);
+        return result.ToOkActionResult();
+    }
 
     [Authorize(Roles = nameof(EUserRole.Admin))]
     [HttpPost]

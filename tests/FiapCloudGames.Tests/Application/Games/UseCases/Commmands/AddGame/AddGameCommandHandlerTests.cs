@@ -16,6 +16,7 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
         private readonly AddOrUpdateGameCommandHandler _handler;
         private readonly Faker _faker;
         private readonly string _description;
+        private readonly string _name;
         private readonly string _developer;
         private readonly decimal _priceValue;
         private readonly int _createdBy;
@@ -26,6 +27,7 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
             _gameRepositoryMock = new Mock<IGameCommandRepository>();
             _handler = new AddOrUpdateGameCommandHandler(_gameRepositoryMock.Object);
             _faker = new Faker("pt_BR");
+            _name = _faker.Name.FullName();
             _description = _faker.Commerce.ProductName();
             _developer = _faker.Company.CompanyName();
             _priceValue = _faker.Random.Decimal(50, 300);
@@ -45,14 +47,14 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
         {
             // Arrange
             var command = AddOrUpdateGameCommand.Create(
-                publicId: null,
+                name: _name,
                 description: _description,
                 genre: GameGenreEnum.ActionRPG,
                 releaseDate: _baseDate,
                 developer: _developer,
                 price: new Price(_priceValue),
                 ageRating: new AgeRating("18+", 18),
-                createdBy: _createdBy
+                publicId: null
             );
 
             _gameRepositoryMock
@@ -83,24 +85,24 @@ namespace FiapCloudGames.Tests.Application.Games.UseCases.Commmands.AddGame
             // Arrange
             var existingGameId = Guid.NewGuid();
             var existingGameCommand = AddOrUpdateGameCommand.Create(
-                publicId: existingGameId,
+                name: _name,
                 description: _description,
                 genre: GameGenreEnum.ActionRPG,
                 releaseDate: _baseDate,
                 developer: _developer,
                 price: new Price(_priceValue),
                 ageRating: new AgeRating("16+", 16),
-                createdBy: _createdBy
+                publicId: existingGameId
             );
 
             var existingGameEntity = Game.Create(
+                name: _name,
                 description: _description,
                 genre: GameGenreEnum.BattleRoyale,
                 releaseDate: _baseDate.AddDays(-1),
                 developer: _developer,
                 price: new Price(_priceValue),
-                ageRating: new AgeRating("Livre", 0),
-                createdBy: _createdBy
+                ageRating: new AgeRating("Livre", 0)
             );
 
             //// Setup do GameExistsAsync para retornar false, indicando que não há outro jogo duplicado

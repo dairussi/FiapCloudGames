@@ -1,10 +1,10 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.Users.Entities;
+using FiapCloudGames.Application.Users.Outputs;
 
 namespace FiapCloudGames.Application.Users.UseCases.Queries.GetUsersPaged;
 
 public interface IGetUsersPagedQueryHandler
 {
-    Task<ResultData<PagedResult<User>>> Handle(GetUsersPagedQuery query, CancellationToken cancellationToken);
+    Task<ResultData<PagedResult<UserOutput>>> Handle(GetUsersPagedQuery query, CancellationToken cancellationToken);
 
 }

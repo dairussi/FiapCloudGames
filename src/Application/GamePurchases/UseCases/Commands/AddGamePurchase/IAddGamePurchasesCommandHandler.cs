@@ -1,9 +1,9 @@
 using FiapCloudGames.Application.Common;
-using FiapCloudGames.Domain.GamePurchases.Entities;
+using FiapCloudGames.Application.GamePurchases.Outputs;
 
 namespace FiapCloudGames.Application.GamePurchases.UseCases.Commands.AddGamePurchase;
 
 public interface IAddGamePurchasesCommandHandler
 {
-    Task<ResultData<GamePurchase>> Handle(AddGamePurchasesComand command, CancellationToken cancellationToken);
+    Task<ResultData<GamePurchaseOutput>> Handle(AddGamePurchasesComand command, CancellationToken cancellationToken);
 }

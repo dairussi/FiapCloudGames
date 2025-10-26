@@ -1,4 +1,6 @@
 using FiapCloudGames.Application.Common;
+using FiapCloudGames.Application.Games.Mappers;
+using FiapCloudGames.Application.Games.Outputs;
 using FiapCloudGames.Domain.Games.Entities;
 using FiapCloudGames.Domain.Games.Ports;
 
@@ -14,7 +16,7 @@ public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
         _gameCommandRepository = gameCommandRepository;
     }
 
-    public async Task<ResultData<Game>> Handle(AddOrUpdateGameCommand command, CancellationToken cancellationToken)
+    public async Task<ResultData<GameOutput>> Handle(AddOrUpdateGameCommand command, CancellationToken cancellationToken)
     {
         var gameExists = await _gameCommandRepository.GameExistsAsync(
                 command.PublicId,
@@ -24,7 +26,7 @@ public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
             );
 
         if (gameExists)
-            return ResultData<Game>.Error("Já existe um jogo com a mesma descrição e desenvolvedora.");
+            return ResultData<GameOutput>.Error("Já existe um jogo com a mesma descrição e desenvolvedora.");
 
         Game game;
 
@@ -33,9 +35,10 @@ public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
             game = await _gameCommandRepository.GetByIdAsync(command.PublicId.Value, cancellationToken);
 
             if (game == null)
-                return ResultData<Game>.Error("Registro não encontrado.");
+                return ResultData<GameOutput>.Error("Registro não encontrado.");
 
             game.UpdateDetails(
+                command.Name,
                 command.Description,
                 command.Genre,
                 command.ReleaseDate,
@@ -48,18 +51,20 @@ public class AddOrUpdateGameCommandHandler : IAddOrUpdateGameCommandHandler
         else
         {
             game = Game.Create(
+                command.Name,
                 command.Description,
                 command.Genre,
                 command.ReleaseDate,
                 command.Developer,
                 command.Price,
-                command.AgeRating,
-                command.CreatedBy
+                command.AgeRating
             );
 
             await _gameCommandRepository.AddAsync(game, cancellationToken);
         }
-        
-        return ResultData<Game>.Success(game);
+
+        var gameOutput = game.ToOutput();
+
+        return ResultData<GameOutput>.Success(gameOutput);
     }
 }
