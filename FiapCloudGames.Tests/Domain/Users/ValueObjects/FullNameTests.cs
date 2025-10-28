@@ -54,7 +54,7 @@ namespace FiapCloudGames.Tests.Domain.Users.ValueObjects
 
             // Assert
             act.Should().Throw<ArgumentException>()
-               .WithMessage("*nome completo deve conter nome e sobrenome*");
+               .WithMessage("*Nome completo deve conter nome e sobrenome.*");
         }
 
         [Fact]
