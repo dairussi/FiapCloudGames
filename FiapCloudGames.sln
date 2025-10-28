@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiapCloudGames", "FiapCloudGames\FiapCloudGames.csproj", "{5EA360AD-AAEE-4D91-AAE4-408B2632F4E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiapCloudGames.Tests", "FiapCloudGames.Tests\FiapCloudGames.Tests.csproj", "{03A1A431-6C7B-123A-012E-5B8E2E57DE8D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5EA360AD-AAEE-4D91-AAE4-408B2632F4E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EA360AD-AAEE-4D91-AAE4-408B2632F4E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EA360AD-AAEE-4D91-AAE4-408B2632F4E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EA360AD-AAEE-4D91-AAE4-408B2632F4E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03A1A431-6C7B-123A-012E-5B8E2E57DE8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03A1A431-6C7B-123A-012E-5B8E2E57DE8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03A1A431-6C7B-123A-012E-5B8E2E57DE8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {711FCC49-74AE-45D2-853C-C2E72049157C}
+	EndGlobalSection
+EndGlobal
