@@ -1,4 +1,5 @@
 using FiapCloudGames.Domain.GamePurchases.Entities;
+using FiapCloudGames.Domain.Games.Entities;
 using FiapCloudGames.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -59,7 +60,7 @@ public class GamePurchaseConfigurations : IEntityTypeConfiguration<GamePurchase>
                 .HasPrecision(18, 2);
         });
 
-        builder.HasOne(gp => gp.Game)
+        builder.HasOne<Game>(gp => gp.Game)
             .WithMany()
             .HasForeignKey(gp => gp.GameId)
             .OnDelete(DeleteBehavior.Restrict);
