@@ -14,6 +14,9 @@ public class AddOrUpdatePromotionInput
     public decimal FixedAmount { get; set; }
     public required string Status { get; set; }
 
+    public IList<Guid>? GamePublicIds { get; set; }
+    public IList<Guid>? UserPublicIds { get; set; }
+
     public AddOrUpdatePromotionCommand MapToCommand()
     {
         if (!Enum.TryParse(DiscountType, true, out DiscountTypeEnum discountTypeEnum))
@@ -22,6 +25,13 @@ public class AddOrUpdatePromotionInput
         if (!Enum.TryParse(Status, true, out PromotionStatusEnum promotionStatusEnum))
             throw new ArgumentException("Status promocional inválido.", nameof(Status));
 
-        return AddOrUpdatePromotionCommand.Create(PublicId, Description, ValidityPeriod.Create(StartDate, EndDate), DiscountRule.Create(discountTypeEnum, Percentage, FixedAmount), promotionStatusEnum);
+        return AddOrUpdatePromotionCommand.Create(
+            PublicId,
+            Description,
+            ValidityPeriod.Create(StartDate, EndDate),
+            DiscountRule.Create(discountTypeEnum, Percentage, FixedAmount),
+            promotionStatusEnum,
+            GamePublicIds ?? new List<Guid>(),
+            UserPublicIds ?? new List<Guid>());
     }
 }

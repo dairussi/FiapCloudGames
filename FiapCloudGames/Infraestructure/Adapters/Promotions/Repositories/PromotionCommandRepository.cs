@@ -15,6 +15,15 @@ public class PromotionCommandRepository : IPromotionCommandRepository
 
     public async Task<Promotion> AddAsync(Promotion promotion, CancellationToken cancellationToken)
     {
+        foreach (var game in promotion.Games)
+        {
+            _dbContext.Attach(game);
+        }
+        foreach (var user in promotion.Users)
+        {
+            _dbContext.Attach(user);
+        }
+
         await _dbContext.Promotions.AddAsync(promotion, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return promotion;
@@ -22,6 +31,15 @@ public class PromotionCommandRepository : IPromotionCommandRepository
 
     public async Task<Promotion> UpdateAsync(Promotion promotion, CancellationToken cancellationToken)
     {
+        foreach (var game in promotion.Games)
+        {
+            _dbContext.Attach(game);
+        }
+        foreach (var user in promotion.Users)
+        {
+            _dbContext.Attach(user);
+        }
+
         _dbContext.Update(promotion);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return promotion;
