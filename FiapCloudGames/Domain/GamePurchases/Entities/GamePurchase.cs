@@ -31,4 +31,5 @@ public class GamePurchase : BaseEntity
         GamePurchase gamePurcharse = new GamePurchase(userId, gameId, DateTime.UtcNow, finalPrice, promotionValue, promotionId);
         return gamePurcharse;
     }
+
 }
