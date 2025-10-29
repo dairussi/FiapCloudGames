@@ -7,5 +7,7 @@ public record PromotionOutput(
     DateTime EndDate,
     string Status,
     decimal DiscountValue,
-    string DiscountType
+    string DiscountType,
+    IList<Guid> GamePublicIds,
+    IList<Guid> UserPublicIds
 );

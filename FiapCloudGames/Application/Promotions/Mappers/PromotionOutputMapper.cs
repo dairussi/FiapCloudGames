@@ -1,6 +1,7 @@
 using FiapCloudGames.Application.Promotions.Outputs;
 using FiapCloudGames.Domain.Promotions.Entities;
 using FiapCloudGames.Domain.Promotions.Enum;
+using System.Linq;
 
 namespace FiapCloudGames.Application.Promotions.Mappers;
 
@@ -12,6 +13,9 @@ public static class PromotionOutputMapper
             ? promotion.DiscountRule.Percentage
             : promotion.DiscountRule.FixedAmount;
 
+        var gameIds = promotion.Games?.Select(g => g.PublicId).ToList() ?? new List<Guid>();
+        var userIds = promotion.Users?.Select(u => u.PublicId).ToList() ?? new List<Guid>();
+
         return new PromotionOutput(
             promotion.PublicId,
             promotion.Description,
@@ -19,7 +23,9 @@ public static class PromotionOutputMapper
             promotion.Period.EndDate,
             promotion.Status.ToString(),
             discountValue,
-            promotion.DiscountRule.Type.ToString()
+            promotion.DiscountRule.Type.ToString(),
+            gameIds,
+            userIds
         );
     }
 
