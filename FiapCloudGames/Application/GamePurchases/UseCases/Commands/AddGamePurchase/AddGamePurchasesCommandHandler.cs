@@ -43,9 +43,7 @@ public class AddGamePurchasesCommandHandler : IAddGamePurchasesCommandHandler
 
         await _gamePurchaseCommandRepository.AddAsync(gamePurchase, cancellationToken);
 
-        gamePurchase.SetGameForOutput(game);
-
-        var gamePurchaseOutput = gamePurchase.ToOutput();
+        var gamePurchaseOutput = gamePurchase.ToOutput(game);
 
         return ResultData<GamePurchaseOutput>.Success(gamePurchaseOutput);
     }

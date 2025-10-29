@@ -17,7 +17,7 @@ public class GamePurchaseQueryRepository : IGamePurchaseQueryRepository
     {
         var totalCount = await _dbContext.GamePurchases.AsNoTracking().CountAsync(cancellationToken);
 
-        var gamePurchase = await _dbContext.GamePurchases.AsNoTracking().Where(gp => gp.UserId == userId).OrderByDescending(gp => gp.DataGamePurchase).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        var gamePurchase = await _dbContext.GamePurchases.AsNoTracking().Where(gp => gp.UserId == userId).Include(gp =>gp.Game).OrderByDescending(gp => gp.DataGamePurchase).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
 
         return new PagedResult<GamePurchase>
         {

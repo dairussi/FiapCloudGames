@@ -32,8 +32,4 @@ public class GamePurchase : BaseEntity
         return gamePurcharse;
     }
 
-    internal void SetGameForOutput(Game game)
-    {
-        Game = game;
-    }
 }
