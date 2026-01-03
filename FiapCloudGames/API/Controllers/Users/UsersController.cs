@@ -10,7 +10,7 @@ namespace FiapCloudGames.API.Controllers.Users;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+//[Authorize]
 public class UsersController : ControllerBase
 {
     [HttpGet]
@@ -36,7 +36,7 @@ public class UsersController : ControllerBase
         return result.ToOkActionResult();
     }
 
-    [Authorize(Roles = nameof(EUserRole.Admin))]
+    // [Authorize(Roles = nameof(EUserRole.Admin))]
     [HttpPost]
     public async Task<IActionResult> AddOrUpdateUser(
         [FromBody] AddOrUpdateUserInput input,
